@@ -7,8 +7,8 @@ import random
 
 from mmengine.runner import set_random_seed
 
-from tools.data.anno_txt2json import lines2dictlist
-from tools.data.parse_file_list import (parse_directory, parse_diving48_splits,
+from anno_txt2json import lines2dictlist
+from parse_file_list import (parse_directory, parse_diving48_splits,
                                         parse_hmdb51_split,
                                         parse_jester_splits,
                                         parse_kinetics_splits,
