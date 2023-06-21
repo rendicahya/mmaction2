@@ -4,16 +4,21 @@ from pathlib import Path
 import cv2
 from moviepy.editor import ImageSequenceClip
 
-result = pickle.load(open("result-ucf101-scenes.pkl", "rb"))
+result = pickle.load(
+    open(
+        "/nas.dbms/randy/projects/mmaction2/data/ucf101-scenes/result-ucf101-scenes.pkl",
+        "rb",
+    )
+)
 dataset_path = Path("/nas.dbms/randy/datasets/ucf101-scenes")
-output_path = Path("/nas.dbms/randy/datasets/ucf101-scenes-corrects")
+output_path = Path("/nas.dbms/randy/datasets/ucf101-scenes-corrects-XX")
 
 classnames = open(
     "/nas.dbms/randy/projects/mmaction2/data/ucf101-scenes/annotations/classInd.txt",
     "r",
-)
+).readlines()
 
-classnames = [line.strip().split() for line in classnames.readlines()]
+classnames = [line.strip().split() for line in classnames]
 classnames = {int(item[0]): item[1] for item in classnames}
 
 test_videos = open(
