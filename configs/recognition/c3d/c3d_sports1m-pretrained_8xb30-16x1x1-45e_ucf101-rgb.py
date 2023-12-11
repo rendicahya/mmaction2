@@ -1,3 +1,5 @@
+import multiprocessing
+
 _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py'
@@ -11,6 +13,7 @@ split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/ucf101/ucf101_train_split_{split}_videos.txt'
 ann_file_val = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
 ann_file_test = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
+num_workers = multiprocessing.cpu_count()
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
@@ -54,7 +57,7 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=30,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -64,7 +67,7 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=30,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
@@ -75,7 +78,7 @@ val_dataloader = dict(
         test_mode=True))
 test_dataloader = dict(
     batch_size=1,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
