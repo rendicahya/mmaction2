@@ -91,7 +91,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type="AccMetric")
 test_evaluator = val_evaluator
-train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=45, val_begin=1, val_interval=5)
+train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=100, val_begin=1, val_interval=5)
 val_cfg = dict(type="ValLoop")
 test_cfg = dict(type="TestLoop")
 

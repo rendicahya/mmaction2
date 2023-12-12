@@ -7,11 +7,12 @@ from mmcv.transforms import BaseTransform
 
 @TRANSFORMS.register_module()
 class ActorCutMix(BaseTransform):
-    def __init__(self, root):
+    def __init__(self, root, prob):
         self.acm_root = Path(root)
+        self.prob = prob
 
     def transform(self, results):
-        if random() > 0.5:
+        if random() > self.prob:
             action, file = results["filename"].split("/")[-2:]
             action_dir = self.acm_root / action
             file_stem = file.split(".")[0]

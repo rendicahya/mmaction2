@@ -1,5 +1,3 @@
-import multiprocessing
-
 _base_ = [
     "../../_base_/models/c3d_sports1m_pretrained.py",
     "../../_base_/default_runtime.py",
@@ -15,11 +13,11 @@ split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
 ann_file_val = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 ann_file_test = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
-num_workers = multiprocessing.cpu_count()
+num_workers = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="ActorCutMix", root=actorcutmix_root),
+    dict(type="ActorCutMix", root=actorcutmix_root, prob=0.5),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),

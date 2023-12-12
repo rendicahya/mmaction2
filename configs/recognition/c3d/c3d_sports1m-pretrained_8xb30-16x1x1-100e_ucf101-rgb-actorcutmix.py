@@ -17,7 +17,7 @@ num_workers = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="ActorCutMix", root=intercutmix_root, prob=0.5),
+    dict(type="ActorCutMix", root=actorcutmix_root, prob=0.5),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
@@ -91,7 +91,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type="AccMetric")
 test_evaluator = val_evaluator
-train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=45, val_begin=1, val_interval=5)
+train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=100, val_begin=1, val_interval=5)
 val_cfg = dict(type="ValLoop")
 test_cfg = dict(type="TestLoop")
 
