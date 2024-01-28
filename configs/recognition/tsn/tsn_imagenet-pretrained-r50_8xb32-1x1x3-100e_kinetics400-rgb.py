@@ -5,10 +5,10 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/kinetics400/videos_train'
-data_root_val = 'data/kinetics400/videos_val'
-ann_file_train = 'data/kinetics400/kinetics400_train_list_videos.txt'
-ann_file_val = 'data/kinetics400/kinetics400_val_list_videos.txt'
+data_root = 'data/kinetics400_tiny/train'
+data_root_val = 'data/kinetics400_tiny/val'
+ann_file_train = 'data/kinetics400_tiny/kinetics_tiny_train_video.txt'
+ann_file_val = 'data/kinetics400_tiny/kinetics_tiny_val_video.txt'
 
 file_client_args = dict(io_backend='disk')
 
@@ -100,3 +100,26 @@ default_hooks = dict(checkpoint=dict(interval=3, max_keep_ckpts=3))
 #       or not by default.
 #   - `base_batch_size` = (8 GPUs) x (32 samples per GPU).
 auto_scale_lr = dict(enable=False, base_batch_size=256)
+
+# set training batch size to 4
+train_dataloader['batch_size'] = 4
+
+# Save checkpoints every epoch, and only keep the latest checkpoint
+default_hooks = dict(
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=1))
+# Set the maximum number of epochs to 10, and validate the model every 1 epochs
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=10, val_interval=1)
+# adjust learning rate schedule according to 10 epochs
+param_scheduler = [
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=10,
+        by_epoch=True,
+        milestones=[4, 8],
+        gamma=0.1)
+]
+
+model = dict(
+    cls_head=dict(num_classes=2))
+load_from = 'https://download.openmmlab.com/mmaction/v1.0/recognition/tsn/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb_20220906-cd10898e.pth'
