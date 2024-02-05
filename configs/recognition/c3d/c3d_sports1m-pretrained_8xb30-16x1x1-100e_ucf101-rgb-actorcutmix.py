@@ -6,8 +6,8 @@ _base_ = [
 # dataset settings
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
-actorcutmix_root = "/nas.dbms/randy/datasets/ucf101/REPP/actorcutmix"
-intercutmix_root = "/nas.dbms/randy/datasets/ucf101/REPP/intercutmix"
+actorcutmix_root = "data/ucf101/REPP/actorcutmix"
+intercutmix_root = "data/ucf101/REPP/intercutmix"
 data_root_val = "data/ucf101/videos"
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
