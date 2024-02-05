@@ -13,17 +13,14 @@ class ActorCutMix(BaseTransform):
 
     def transform(self, results):
         if random() > self.prob:
-            action, file = results["filename"].split("/")[-2:]
+            filepath = Path(results["filename"])
+            action = filepath.parent.name
             action_dir = self.acm_root / action
-            file_stem = file.split(".")[0]
-
             options = [
-                file
-                for file in action_dir.iterdir()
-                if str(file.stem).startswith(file_stem)
+                f for f in action_dir.iterdir() if str(f.stem).startswith(filepath.stem)
             ]
 
-            pick = choice(options)
-            results["filename"] = str(pick)
+            video_pick = choice(options)
+            results["filename"] = str(video_pick)
 
         return results
