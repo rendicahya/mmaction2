@@ -14,6 +14,7 @@ ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
 ann_file_val = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 ann_file_test = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 num_workers = 16
+batch_size = 64
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
@@ -51,7 +52,7 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=30,
+    batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type="DefaultSampler", shuffle=True),
@@ -63,7 +64,7 @@ train_dataloader = dict(
     ),
 )
 val_dataloader = dict(
-    batch_size=30,
+    batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type="DefaultSampler", shuffle=False),
@@ -111,7 +112,7 @@ optim_wrapper = dict(
     clip_grad=dict(max_norm=40, norm_type=2),
 )
 
-default_hooks = dict(checkpoint=dict(interval=5, max_keep_ckpts=1))
+default_hooks = dict(checkpoint=dict(interval=1000, max_keep_ckpts=1))
 
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically
