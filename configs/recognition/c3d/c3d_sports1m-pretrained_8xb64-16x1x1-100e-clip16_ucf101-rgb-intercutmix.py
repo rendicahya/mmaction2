@@ -6,20 +6,22 @@ _base_ = [
 # dataset settings
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
-actorcutmix_root = "/nas.dbms/randy/datasets/ucf101-mix-xgtf-actor"
-intercutmix_root = "/nas.dbms/randy/datasets/ucf101-mix-xgtf-inter"
+actorcutmix_root = "data/ucf101/REPP/actorcutmix"
+intercutmix_root = "data/ucf101/REPP/intercutmix"
 data_root_val = "data/ucf101/videos"
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
 ann_file_val = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 ann_file_test = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 num_workers = 16
+batch_size = 64
+clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
     dict(type="ActorCutMix", root=intercutmix_root, prob=0.5),
     dict(type="DecordInit", **file_client_args),
-    dict(type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1),
+    dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
     dict(type="RandomCrop", size=112),
@@ -30,7 +32,7 @@ train_pipeline = [
 val_pipeline = [
     dict(type="DecordInit", **file_client_args),
     dict(
-        type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1, test_mode=True
+        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1, test_mode=True
     ),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
@@ -41,7 +43,7 @@ val_pipeline = [
 test_pipeline = [
     dict(type="DecordInit", **file_client_args),
     dict(
-        type="SampleFrames", clip_len=16, frame_interval=1, num_clips=10, test_mode=True
+        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=10, test_mode=True
     ),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
@@ -51,7 +53,7 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=30,
+    batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type="DefaultSampler", shuffle=True),
@@ -63,7 +65,7 @@ train_dataloader = dict(
     ),
 )
 val_dataloader = dict(
-    batch_size=30,
+    batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type="DefaultSampler", shuffle=False),
@@ -91,7 +93,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type="AccMetric")
 test_evaluator = val_evaluator
-train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=45, val_begin=1, val_interval=5)
+train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=100, val_begin=1, val_interval=1)
 val_cfg = dict(type="ValLoop")
 test_cfg = dict(type="TestLoop")
 
@@ -111,7 +113,7 @@ optim_wrapper = dict(
     clip_grad=dict(max_norm=40, norm_type=2),
 )
 
-default_hooks = dict(checkpoint=dict(interval=5))
+default_hooks = dict(checkpoint=dict(interval=1000, max_keep_ckpts=1))
 
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically

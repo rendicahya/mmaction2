@@ -15,12 +15,13 @@ ann_file_val = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 ann_file_test = f"data/ucf101/ucf101_val_split_{split}_videos.txt"
 num_workers = 16
 batch_size = 64
+clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
     dict(type="ActorCutMix", root=actorcutmix_root, prob=0.5),
     dict(type="DecordInit", **file_client_args),
-    dict(type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1),
+    dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
     dict(type="RandomCrop", size=112),
@@ -31,7 +32,7 @@ train_pipeline = [
 val_pipeline = [
     dict(type="DecordInit", **file_client_args),
     dict(
-        type="SampleFrames", clip_len=16, frame_interval=1, num_clips=1, test_mode=True
+        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1, test_mode=True
     ),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
@@ -42,7 +43,7 @@ val_pipeline = [
 test_pipeline = [
     dict(type="DecordInit", **file_client_args),
     dict(
-        type="SampleFrames", clip_len=16, frame_interval=1, num_clips=10, test_mode=True
+        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=10, test_mode=True
     ),
     dict(type="DecordDecode"),
     dict(type="Resize", scale=(-1, 128)),
