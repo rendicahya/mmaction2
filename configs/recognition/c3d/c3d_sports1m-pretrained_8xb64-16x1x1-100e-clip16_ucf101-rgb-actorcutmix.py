@@ -7,7 +7,9 @@ _base_ = [
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
 actorcutmix_root = "data/ucf101/REPP/actorcutmix"
+actorcutmix_list = "data/ucf101/REPP/actorcutmix.json"
 intercutmix_root = "data/ucf101/REPP/intercutmix"
+intercutmix_list = "data/ucf101/REPP/intercutmix.json"
 data_root_val = "data/ucf101/videos"
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
@@ -19,7 +21,7 @@ clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="ActorCutMix", root=actorcutmix_root, prob=0.5),
+    dict(type="ActorCutMix", root=actorcutmix_root, file_list=actorcutmix_list, prob=0.5),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
