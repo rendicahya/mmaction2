@@ -9,17 +9,13 @@ from mmcv.transforms import BaseTransform
 class AccessEpoch(BaseTransform):
     def __init__(self, total):
         self.total = total
+        self.count = 0
 
     def transform(self, results):
-        if random() > self.prob:
-            filepath = Path(results["filename"])
-            action = filepath.parent.name
-            action_dir = self.acm_root / action
-            options = [
-                f for f in action_dir.iterdir() if str(f.stem).startswith(filepath.stem)
-            ]
+        if self.count == self.total:
+            print("===== EPOCH", self.count / self.total, "=====")
+            self.count = 0
 
-            video_pick = choice(options)
-            results["filename"] = str(video_pick)
+        self.count += 1
 
         return results
