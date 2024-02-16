@@ -16,7 +16,7 @@ class ActorCutMix(BaseTransform):
             self.file_list = json.load(f)
 
     def transform(self, results):
-        if random() > self.prob:
+        if random() < self.prob:
             file_path = Path(results["filename"])
             action = file_path.parent.name
             options = [f for f in self.file_list[action] if file_path.stem in f]

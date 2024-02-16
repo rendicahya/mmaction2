@@ -12,7 +12,7 @@ class ActorCutMix(BaseTransform):
         self.prob = prob
 
     def transform(self, results):
-        if random() > self.prob:
+        if random() < self.prob:
             filepath = Path(results["filename"])
             action = filepath.parent.name
             action_dir = self.acm_root / action
