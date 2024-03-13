@@ -17,7 +17,6 @@ clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="AccessEpoch"),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
@@ -91,7 +90,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type="AccMetric")
 test_evaluator = val_evaluator
-train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=1, val_begin=1, val_interval=1)
+train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=100, val_begin=1, val_interval=1)
 val_cfg = dict(type="ValLoop")
 test_cfg = dict(type="TestLoop")
 

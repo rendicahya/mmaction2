@@ -1,6 +1,6 @@
 _base_ = [
-    "../../_base_/models/c3d_sports1m_pretrained.py",
-    "../../_base_/default_runtime.py",
+    "../../../_base_/models/c3d_sports1m_pretrained.py",
+    "../../../_base_/default_runtime.py",
 ]
 
 # dataset settings
@@ -21,7 +21,7 @@ clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="ActorCutMix", root=intercutmix_root, file_list=intercutmix_file_list, prob=0.1),
+    dict(type="ActorCutMix", root=intercutmix_root, file_list=intercutmix_file_list, prob=0.3),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),

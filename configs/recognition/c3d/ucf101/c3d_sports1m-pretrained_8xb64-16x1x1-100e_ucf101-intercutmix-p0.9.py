@@ -1,6 +1,6 @@
 _base_ = [
-    "../../_base_/models/c3d_sports1m_pretrained.py",
-    "../../_base_/default_runtime.py",
+    "../../../_base_/models/c3d_sports1m_pretrained.py",
+    "../../../_base_/default_runtime.py",
 ]
 
 # dataset settings
