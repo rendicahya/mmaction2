@@ -6,9 +6,9 @@ _base_ = [
 # dataset settings
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
-actorcutmix_root = "data/ucf101/REPP/actorcutmix/videos"
+actorcutmix_root = "data/ucf101/REPP/actorcutmix/mix"
 actorcutmix_list = "data/ucf101/REPP/actorcutmix.json"
-intercutmix_root = "data/ucf101/REPP/intercutmix/videos"
+intercutmix_root = "data/ucf101/REPP/intercutmix/mix"
 intercutmix_list = "data/ucf101/REPP/intercutmix.json"
 data_root_val = "data/ucf101/videos"
 split = 1  # official train/test splits. valid numbers: 1, 2, 3

@@ -6,8 +6,8 @@ _base_ = [
 # dataset settings
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
-actorcutmix_root = "data/ucf101/REPP/actorcutmix/videos"
-intercutmix_root = "data/ucf101/REPP/intercutmix/videos"
+actorcutmix_root = "data/ucf101/REPP/actorcutmix/mix"
+intercutmix_root = "data/ucf101/REPP/intercutmix/mix"
 actorcutmix_file_list = "data/ucf101/REPP/actorcutmix.json"
 intercutmix_file_list = "data/ucf101/REPP/intercutmix.json"
 data_root_val = "data/ucf101/videos"
