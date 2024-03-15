@@ -1,6 +1,6 @@
 _base_ = [
-    '../../_base_/models/tsn_r50.py', '../../_base_/schedules/sgd_100e.py',
-    '../../_base_/default_runtime.py'
+    '../../../_base_/models/tsn_r50.py', '../../../_base_/schedules/sgd_100e.py',
+    '../../../_base_/default_runtime.py'
 ]
 
 # dataset settings
@@ -110,18 +110,18 @@ train_dataloader['batch_size'] = 4
 default_hooks = dict(
     checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=1))
 # Set the maximum number of epochs to 10, and validate the model every 1 epochs
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=10, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=50, val_begin=1, val_interval=1)
 # adjust learning rate schedule according to 10 epochs
 param_scheduler = [
     dict(
         type='MultiStepLR',
         begin=0,
-        end=10,
+        end=50,
         by_epoch=True,
-        milestones=[4, 8],
+        milestones=[20, 40],
         gamma=0.1)
 ]
 
 model = dict(
-    cls_head=dict(num_classes=2))
+    cls_head=dict(num_classes=101))
 load_from = 'https://download.openmmlab.com/mmaction/v1.0/recognition/tsn/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb_20220906-cd10898e.pth'
