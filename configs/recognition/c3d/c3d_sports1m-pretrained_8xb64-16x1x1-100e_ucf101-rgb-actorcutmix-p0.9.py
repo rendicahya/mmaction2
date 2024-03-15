@@ -1,11 +1,15 @@
 _base_ = [
-    "../../../_base_/models/c3d_sports1m_pretrained.py",
-    "../../../_base_/default_runtime.py",
+    "../../_base_/models/c3d_sports1m_pretrained.py",
+    "../../_base_/default_runtime.py",
 ]
 
 # dataset settings
 dataset_type = "VideoDataset"
 data_root = "data/ucf101/videos"
+actorcutmix_root = "data/ucf101/REPP/actorcutmix/mix"
+actorcutmix_list = "data/ucf101/REPP/actorcutmix.json"
+intercutmix_root = "data/ucf101/REPP/intercutmix/mix"
+intercutmix_list = "data/ucf101/REPP/intercutmix.json"
 data_root_val = "data/ucf101/videos"
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f"data/ucf101/ucf101_train_split_{split}_videos.txt"
@@ -17,7 +21,7 @@ clip_len = 16
 
 file_client_args = dict(io_backend="disk")
 train_pipeline = [
-    dict(type="AccessEpoch", total=13320),
+    dict(type="ActorCutMix", root=actorcutmix_root, file_list=actorcutmix_list, prob=0.9),
     dict(type="DecordInit", **file_client_args),
     dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type="DecordDecode"),
