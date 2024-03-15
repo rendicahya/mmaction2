@@ -1,63 +1,61 @@
 _base_ = [
-    "../../_base_/models/c3d_sports1m_pretrained.py",
-    "../../_base_/default_runtime.py",
+    '../../_base_/models/c3d_sports1m_pretrained.py',
+    '../../_base_/default_runtime.py',
 ]
 
 # dataset settings
-dataset_type = "VideoDataset"
-data_root = "data/hmdb51/videos"
-actorcutmix_root = "data/hmdb51/REPP/actorcutmix"
-intercutmix_root = "data/hmdb51/REPP/intercutmix"
-actorcutmix_file_list = "data/hmdb51/REPP/actorcutmix.json"
-intercutmix_file_list = "data/hmdb51/REPP/intercutmix.json"
-data_root_val = "data/hmdb51/videos"
-ann_file_train = f"data/hmdb51/train.txt"
-ann_file_val = f"data/hmdb51/test.txt"
-ann_file_test = f"data/hmdb51/test.txt"
+dataset_type = 'VideoDataset'
+data_root = 'data/hmdb51/videos'
+video_root = 'data/hmdb51/REPP/intercutmix'
+video_list = 'data/hmdb51/REPP/intercutmix.json'
+data_root_val = 'data/hmdb51/videos'
+ann_file_train = f'data/hmdb51/train.txt'
+ann_file_val = f'data/hmdb51/test.txt'
+ann_file_test = f'data/hmdb51/test.txt'
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
-file_client_args = dict(io_backend="disk")
+file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type="ActorCutMix", root=intercutmix_root, file_list=intercutmix_file_list, prob=0.1),
-    dict(type="DecordInit", **file_client_args),
-    dict(type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1),
-    dict(type="DecordDecode"),
-    dict(type="Resize", scale=(-1, 128)),
-    dict(type="RandomCrop", size=112),
-    dict(type="Flip", flip_ratio=0.5),
-    dict(type="FormatShape", input_format="NCTHW"),
-    dict(type="PackActionInputs"),
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.1),
+    dict(type='DecordInit', **file_client_args),
+    dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
+    dict(type='DecordDecode'),
+    dict(type='Resize', scale=(-1, 128)),
+    dict(type='RandomCrop', size=112),
+    dict(type='Flip', flip_ratio=0.5),
+    dict(type='FormatShape', input_format='NCTHW'),
+    dict(type='PackActionInputs'),
 ]
 val_pipeline = [
-    dict(type="DecordInit", **file_client_args),
+    dict(type='DecordInit', **file_client_args),
     dict(
-        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=1, test_mode=True
+        type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1, test_mode=True
     ),
-    dict(type="DecordDecode"),
-    dict(type="Resize", scale=(-1, 128)),
-    dict(type="CenterCrop", crop_size=112),
-    dict(type="FormatShape", input_format="NCTHW"),
-    dict(type="PackActionInputs"),
+    dict(type='DecordDecode'),
+    dict(type='Resize', scale=(-1, 128)),
+    dict(type='CenterCrop', crop_size=112),
+    dict(type='FormatShape', input_format='NCTHW'),
+    dict(type='PackActionInputs'),
 ]
 test_pipeline = [
-    dict(type="DecordInit", **file_client_args),
+    dict(type='DecordInit', **file_client_args),
     dict(
-        type="SampleFrames", clip_len=clip_len, frame_interval=1, num_clips=10, test_mode=True
+        type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=10, test_mode=True
     ),
-    dict(type="DecordDecode"),
-    dict(type="Resize", scale=(-1, 128)),
-    dict(type="CenterCrop", crop_size=112),
-    dict(type="FormatShape", input_format="NCTHW"),
-    dict(type="PackActionInputs"),
+    dict(type='DecordDecode'),
+    dict(type='Resize', scale=(-1, 128)),
+    dict(type='CenterCrop', crop_size=112),
+    dict(type='FormatShape', input_format='NCTHW'),
+    dict(type='PackActionInputs'),
 ]
 
 train_dataloader = dict(
     batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
-    sampler=dict(type="DefaultSampler", shuffle=True),
+    sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_train,
@@ -69,7 +67,7 @@ val_dataloader = dict(
     batch_size=batch_size,
     num_workers=num_workers,
     persistent_workers=True,
-    sampler=dict(type="DefaultSampler", shuffle=False),
+    sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
@@ -82,7 +80,7 @@ test_dataloader = dict(
     batch_size=1,
     num_workers=num_workers,
     persistent_workers=True,
-    sampler=dict(type="DefaultSampler", shuffle=False),
+    sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_test,
@@ -92,15 +90,15 @@ test_dataloader = dict(
     ),
 )
 
-val_evaluator = dict(type="AccMetric")
+val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
-train_cfg = dict(type="EpochBasedTrainLoop", max_epochs=100, val_begin=1, val_interval=1)
-val_cfg = dict(type="ValLoop")
-test_cfg = dict(type="TestLoop")
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100, val_begin=1, val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
 
 param_scheduler = [
     dict(
-        type="MultiStepLR",
+        type='MultiStepLR',
         begin=0,
         end=45,
         by_epoch=True,
@@ -110,7 +108,7 @@ param_scheduler = [
 ]
 
 optim_wrapper = dict(
-    optimizer=dict(type="SGD", lr=0.001, momentum=0.9, weight_decay=0.0005),
+    optimizer=dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005),
     clip_grad=dict(max_norm=40, norm_type=2),
 )
 
