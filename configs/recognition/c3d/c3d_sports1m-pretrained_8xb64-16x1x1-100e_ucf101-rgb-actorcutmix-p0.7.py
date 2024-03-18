@@ -6,7 +6,7 @@ _base_ = [
 # dataset settings
 dataset_type = 'VideoDataset'
 data_root = 'data/ucf101/videos'
-video_root = 'data/ucf101/REPP/actorcutmix/mix'
+video_root = 'data/ucf101/REPP/actorcutmix/mix/all-mpnet-base-v2/0.5'
 video_list = 'data/ucf101/REPP/actorcutmix.json'
 data_root_val = 'data/ucf101/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
