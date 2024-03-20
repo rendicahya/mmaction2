@@ -5,17 +5,23 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/ucf101/videos'
-video_root = 'data/ucf101/REPP/actorcutmix/mix/all-mpnet-base-v2/0.5'
-video_list = 'data/ucf101/REPP/actorcutmix.json'
-data_root_val = 'data/ucf101/videos'
-split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/ucf101/ucf101_train_split_{split}_videos.txt'
-ann_file_val = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
-ann_file_test = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
+dataset = 'ucf101'
+mix_mode = 'actorcutmix'
+min_mask_ratio = 0.2
+relevancy_model = 'all-mpnet-base-v2/'
+relevancy_thresh = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
+
+data_root = f'data/{dataset}/videos'
+video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{min_mask_ratio}/{relevancy_model}/{relevancy_thresh}'
+video_list = f'data/{dataset}/REPP/{mix_mode}.json'
+data_root_val = f'data/{dataset}/videos'
+split = 1  # official train/test splits. valid numbers: 1, 2, 3
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
