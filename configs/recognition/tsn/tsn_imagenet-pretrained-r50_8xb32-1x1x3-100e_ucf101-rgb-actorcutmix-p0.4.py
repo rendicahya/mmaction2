@@ -8,11 +8,12 @@ dataset_type = 'VideoDataset'
 dataset = 'ucf101'
 data_root = f'data/{dataset}/videos'
 mix_mode = 'actorcutmix'
-min_mask_ratio = 0.2
+min_mask_ratio = 0.0
 relevancy_model = 'all-mpnet-base-v2/'
 relevancy_thresh = 0.5
+
 video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{min_mask_ratio}/{relevancy_model}/{relevancy_thresh}'
-video_list = f'data/{dataset}/REPP/{mix_mode}.json'
+video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'

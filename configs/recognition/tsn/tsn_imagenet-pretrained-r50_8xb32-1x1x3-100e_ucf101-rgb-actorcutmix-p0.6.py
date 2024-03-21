@@ -7,7 +7,7 @@ _base_ = [
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
 data_root = f'data/{dataset}/videos'
-mix_mode = 'intercutmix'
+mix_mode = 'actorcutmix'
 min_mask_ratio = 0.0
 relevancy_model = 'all-mpnet-base-v2/'
 relevancy_thresh = 0.5
@@ -25,7 +25,7 @@ batch_size = 64
 file_client_args = dict(io_backend='disk')
 
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.1),
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.6),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=1, frame_interval=1, num_clips=3),
     dict(type='DecordDecode'),
