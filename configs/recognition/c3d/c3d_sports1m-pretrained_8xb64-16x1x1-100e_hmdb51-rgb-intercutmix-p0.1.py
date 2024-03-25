@@ -18,7 +18,7 @@ clip_len = 16
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.1),
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.1, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),

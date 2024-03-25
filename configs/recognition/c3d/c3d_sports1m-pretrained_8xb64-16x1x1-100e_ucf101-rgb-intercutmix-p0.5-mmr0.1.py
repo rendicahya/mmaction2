@@ -5,20 +5,27 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/hmdb51/videos'
-video_root = 'data/hmdb51/REPP/actorcutmix'
-video_list = 'data/hmdb51/REPP/actorcutmix.json'
-data_root_val = 'data/hmdb51/videos'
-ann_file_train = f'data/hmdb51/train.txt'
-ann_file_val = f'data/hmdb51/test.txt'
-ann_file_test = f'data/hmdb51/test.txt'
+dataset = 'ucf101'
+mix_mode = 'intercutmix'
+min_mask_ratio = 0.1
+relevancy_model = 'all-mpnet-base-v2'
+relevancy_thresh = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
+data_root = f'data/{dataset}/videos'
+video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
+video_list = f'{video_root}/list.json'
+data_root_val = f'data/{dataset}/videos'
+split = 1  # official train/test splits. valid numbers: 1, 2, 3
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.1, min_mask_ratio=min_mask_ratio),
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.5, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
