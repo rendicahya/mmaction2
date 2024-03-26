@@ -5,16 +5,27 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/ucf101/videos'
-data_root_val = 'data/ucf101/videos'
+dataset = 'ucf101'
+mix_mode = 'intercutmix'
+min_mask_ratio = 0.4
+relevancy_model = 'all-mpnet-base-v2/'
+relevancy_thresh = 0.5
+num_workers = 16
+batch_size = 64
+
+data_root = f'data/{dataset}/videos'
+video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
+video_list = f'{video_root}/list.json'
+data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f"data/hmdb51/ucf101_train_split_{split}_videos.txt"
-ann_file_val = f"data/hmdb51/ucf101_val_split_{split}_videos.txt"
-ann_file_test = f"data/hmdb51/ucf101_val_split_{split}_videos.txt"
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 
 train_pipeline = [
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.5),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=1, frame_interval=1, num_clips=3),
     dict(type='DecordDecode'),
@@ -60,8 +71,8 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=32,
-    num_workers=8,
+    batch_size=batch_size,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -70,8 +81,8 @@ train_dataloader = dict(
         data_prefix=dict(video=data_root),
         pipeline=train_pipeline))
 val_dataloader = dict(
-    batch_size=32,
-    num_workers=8,
+    batch_size=batch_size,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
@@ -82,7 +93,7 @@ val_dataloader = dict(
         test_mode=True))
 test_dataloader = dict(
     batch_size=1,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(

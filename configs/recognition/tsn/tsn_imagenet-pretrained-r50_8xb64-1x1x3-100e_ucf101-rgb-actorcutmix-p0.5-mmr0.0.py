@@ -6,26 +6,26 @@ _base_ = [
 # dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-data_root = f'data/{dataset}/videos'
-mix_mode = 'intercutmix'
+mix_mode = 'actorcutmix'
 min_mask_ratio = 0.0
 relevancy_model = 'all-mpnet-base-v2/'
 relevancy_thresh = 0.5
+num_workers = 16
+batch_size = 64
 
-video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{min_mask_ratio}/{relevancy_model}/{relevancy_thresh}'
+data_root = f'data/{dataset}/videos'
+video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
 video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 16
-batch_size = 64
 
 file_client_args = dict(io_backend='disk')
 
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.7),
+    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.5),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=1, frame_interval=1, num_clips=3),
     dict(type='DecordDecode'),
