@@ -10,7 +10,7 @@ mix_mode = 'actorcutmix'
 min_mask_ratio = 0.0
 relevancy_model = 'all-mpnet-base-v2/'
 relevancy_thresh = 0.5
-num_workers = 16
+num_workers = 12
 batch_size = 64
 
 data_root = f'data/{dataset}/videos'
@@ -106,7 +106,7 @@ test_dataloader = dict(
 val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
 
-default_hooks = dict(checkpoint=dict(interval=3, max_keep_ckpts=3))
+default_hooks = dict(checkpoint=dict(interval=1000, max_keep_ckpts=1))
 
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically
@@ -119,9 +119,9 @@ train_dataloader['batch_size'] = 4
 
 # Save checkpoints every epoch, and only keep the latest checkpoint
 default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=1))
+    checkpoint=dict(type='CheckpointHook', interval=1000, max_keep_ckpts=1))
 # Set the maximum number of epochs to 10, and validate the model every 1 epochs
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=50, val_begin=1, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=64, val_begin=1, val_interval=1)
 # adjust learning rate schedule according to 10 epochs
 param_scheduler = [
     dict(
