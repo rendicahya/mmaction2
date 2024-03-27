@@ -8,7 +8,7 @@ model = dict(
     cls_head=dict(in_channels=1024))
 
 train_cfg = dict(
-    type='EpochBasedTrainLoop', max_epochs=50, val_begin=1, val_interval=1)
+    type='EpochBasedTrainLoop', max_epochs=64, val_begin=1, val_interval=1)
 
 param_scheduler = [
     dict(
