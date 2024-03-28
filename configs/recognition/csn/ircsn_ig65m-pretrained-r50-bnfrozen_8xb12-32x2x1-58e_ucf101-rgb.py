@@ -5,26 +5,22 @@ _base_ = [
 # model settings
 model = dict(
     backbone=dict(
+        depth=50,
+        norm_eval=True,
+        bn_frozen=True,
         pretrained='https://download.openmmlab.com/mmaction/recognition/csn/'
-        'ircsn_from_scratch_r152_ig65m_20200807-771c4135.pth'))
+        'ircsn_from_scratch_r50_ig65m_20210617-ce545a37.pth'))
 
 # dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-mix_mode = 'intercutmix'
-min_mask_ratio = 0.0
-relevancy_model = 'all-mpnet-base-v2'
-relevancy_thresh = 0.5
-num_workers = 12
-
 data_root = 'data/ucf101/videos'
-video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
-video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+num_workers = 12
 
 # file_client_args = dict(
 #      io_backend='petrel',
@@ -33,7 +29,6 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 file_client_args = dict(io_backend='disk')
 
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.5, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=32, frame_interval=2, num_clips=1),
     dict(type='DecordDecode'),
