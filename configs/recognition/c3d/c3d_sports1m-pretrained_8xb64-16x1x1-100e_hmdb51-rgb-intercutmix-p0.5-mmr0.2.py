@@ -19,9 +19,9 @@ video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_t
 video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
-ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_train = f'data/{dataset}/train.txt'
+ann_file_val = f'data/{dataset}/test.txt'
+ann_file_val = f'data/{dataset}/test.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
