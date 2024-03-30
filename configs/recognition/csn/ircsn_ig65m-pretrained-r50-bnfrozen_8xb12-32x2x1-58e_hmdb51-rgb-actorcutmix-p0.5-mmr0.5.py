@@ -20,7 +20,7 @@ relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
 num_workers = 12
 
-data_root = 'data/ucf101/videos'
+data_root = 'data/hmdb51/videos'
 video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
 video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
