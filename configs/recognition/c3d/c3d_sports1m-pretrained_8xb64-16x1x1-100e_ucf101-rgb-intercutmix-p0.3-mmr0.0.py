@@ -15,7 +15,7 @@ batch_size = 64
 clip_len = 16
 
 data_root = f'data/{dataset}/videos'
-video_root = f'data/{dataset}/REPP/{mix_mode}/mix/{relevancy_model}/{relevancy_thresh}'
+video_root = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix/{relevancy_model}/{relevancy_thresh}'
 video_list = f'{video_root}/list.json'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
