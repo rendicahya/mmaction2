@@ -7,6 +7,7 @@ _base_ = [
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'intercutmix'
+detector = 'UniDet'
 min_mask_ratio = 0.1
 relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
@@ -15,8 +16,7 @@ batch_size = 64
 clip_len = 16
 
 data_root = f'data/{dataset}/videos'
-video_root = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix/{relevancy_model}/{relevancy_thresh}'
-video_list = f'{video_root}/list.json'
+video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix/{relevancy_model}/{relevancy_thresh}'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/train.txt'
@@ -25,7 +25,7 @@ ann_file_test = f'data/{dataset}/test.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix', root=video_root, file_list=video_list, prob=0.5, min_mask_ratio=min_mask_ratio),
+    dict(type='InterCutMix', video_dir=video_dir, mix_prob=0.5, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
