@@ -7,19 +7,24 @@ from mmcv.transforms import BaseTransform
 
 
 @TRANSFORMS.register_module()
-class ActorCutMix(BaseTransform):
+class InterCutMix(BaseTransform):
     def __init__(self, video_dir, mix_prob=0.5, min_mask_ratio=0.0):
         self.video_dir = Path(video_dir)
         self.mix_prob = mix_prob
         self.min_mask_ratio = min_mask_ratio
 
         video_list_path = self.video_dir / "list.json"
-        mask_ratio_path = self.video_dir.parent / "mask/ratio.json"
+        relevancy_thresh = self.video_dir
+        relevancy_model = self.video_dir.parent
+        mask_dir = relevancy_model.parent.parent / "mask"
+        file_ratio_path = (
+            mask_dir / relevancy_model.name / relevancy_thresh.name / "ratio.json"
+        )
 
         with open(video_list_path) as f:
             self.video_list = json.load(f)
 
-        with open(mask_ratio_path) as f:
+        with open(file_ratio_path) as f:
             self.mask_ratio = json.load(f)
 
     def transform(self, results):
