@@ -14,7 +14,7 @@ batch_size = 64
 clip_len = 16
 
 data_root = f'data/{dataset}/videos'
-video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix'
+video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/train.txt'
