@@ -2,21 +2,24 @@ _base_ = [
     '../../_base_/models/ircsn_r152.py', '../../_base_/default_runtime.py'
 ]
 
+# model settings
 model = dict(
     backbone=dict(
+        depth=50,
+        norm_eval=True,
+        bn_frozen=True,
         pretrained='https://download.openmmlab.com/mmaction/recognition/csn/'
-        'ircsn_from_scratch_r152_ig65m_20200807-771c4135.pth'))
+        'ircsn_from_scratch_r50_ig65m_20210617-ce545a37.pth'))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-
-data_root = f'data/{dataset}/videos'
+data_root = 'data/ucf101/videos'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 12
+num_workers = 16
 
 # file_client_args = dict(
 #      io_backend='petrel',
@@ -130,5 +133,3 @@ find_unused_parameters = True
 #       or not by default.
 #   - `base_batch_size` = (8 GPUs) x (12 samples per GPU).
 auto_scale_lr = dict(enable=False, base_batch_size=96)
-
-

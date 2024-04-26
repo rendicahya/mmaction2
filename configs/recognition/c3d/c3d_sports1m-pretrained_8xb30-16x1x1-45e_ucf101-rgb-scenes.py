@@ -5,12 +5,16 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/ucf101-scenes/videos'
-data_root_val = 'data/ucf101-scenes/videos'
+dataset = 'ucf101'
+detector = 'UniDet'
+mix_mode = 'actorcutmix'
+data_root = 'data/ucf101/videos'
+data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/ucf101-scenes/ucf101_train_split_{split}_videos.txt'
-ann_file_val = f'data/ucf101-scenes/ucf101_val_split_{split}_videos.txt'
-ann_file_test = f'data/ucf101-scenes/ucf101_scenes_all.txt'
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/scene/list.txt'
+num_workers = 16
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
@@ -54,7 +58,7 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=30,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -64,7 +68,7 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=30,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
@@ -75,7 +79,7 @@ val_dataloader = dict(
         test_mode=True))
 test_dataloader = dict(
     batch_size=1,
-    num_workers=8,
+    num_workers=num_workers,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(

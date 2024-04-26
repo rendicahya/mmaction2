@@ -2,21 +2,30 @@ _base_ = [
     '../../_base_/models/ircsn_r152.py', '../../_base_/default_runtime.py'
 ]
 
+# model settings
 model = dict(
     backbone=dict(
+        depth=50,
+        norm_eval=True,
+        bn_frozen=True,
         pretrained='https://download.openmmlab.com/mmaction/recognition/csn/'
-        'ircsn_from_scratch_r152_ig65m_20200807-771c4135.pth'))
+        'ircsn_from_scratch_r50_ig65m_20210617-ce545a37.pth'))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
+mix_mode = 'actorcutmix'
+detector = 'UniDet'
+min_mask_ratio = 0.1
+mix_prob = 0.5
+num_workers = 16
 
-data_root = f'data/{dataset}/videos'
+data_root = 'data/ucf101/videos'
+video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 12
 
 # file_client_args = dict(
 #      io_backend='petrel',
@@ -25,6 +34,7 @@ num_workers = 12
 file_client_args = dict(io_backend='disk')
 
 train_pipeline = [
+    dict(type='ActorCutMix', video_dir=video_dir, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=32, frame_interval=2, num_clips=1),
     dict(type='DecordDecode'),
@@ -130,5 +140,3 @@ find_unused_parameters = True
 #       or not by default.
 #   - `base_batch_size` = (8 GPUs) x (12 samples per GPU).
 auto_scale_lr = dict(enable=False, base_batch_size=96)
-
-
