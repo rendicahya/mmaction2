@@ -3,16 +3,16 @@ _base_ = [
     '../../_base_/default_runtime.py'
 ]
 
-# dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-data_root = 'data/ucf101/videos'
+
+data_root = f'data/{dataset}/videos'
 data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 12
+num_workers = 16
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
