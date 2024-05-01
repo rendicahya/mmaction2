@@ -6,12 +6,12 @@ _base_ = [
 # dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-data_root = f'data/{dataset}/videos'
+data_root = f'data/{dataset}/UniDet/select/intercutmix/REPP/scene'
 data_root_val = data_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/UniDet/select/intercutmix/REPP/scene/list.txt'
 num_workers = 16
 batch_size = 64
 clip_len = 16
