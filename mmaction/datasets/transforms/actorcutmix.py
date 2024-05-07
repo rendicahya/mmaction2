@@ -1,5 +1,6 @@
 import json
-import os
+import re
+from collections import defaultdict
 from pathlib import Path
 from random import choice, random
 
@@ -13,14 +14,17 @@ class ActorCutMix(BaseTransform):
         self.video_dir = Path(video_dir)
         self.mix_prob = mix_prob
         self.min_mask_ratio = min_mask_ratio
+        self.video_list = defaultdict(list)
+        path_splitter = re.compile(r"[/-]")
 
-        video_list_path = self.video_dir / "list.json"
-        mask_ratio_path = self.video_dir.parent / "mask/ratio.json"
+        with open(self.video_dir / "list.txt") as file:
+            for line in file:
+                path, class_ = line.split()
+                action, action_video, scene_class = path_splitter.split(path)
 
-        with open(video_list_path) as f:
-            self.video_list = json.load(f)
+                self.video_list[action_video].append(path)
 
-        with open(mask_ratio_path) as f:
+        with open(self.video_dir.parent / "mask/ratio.json") as f:
             self.mask_ratio = json.load(f)
 
     def transform(self, results):
@@ -30,8 +34,7 @@ class ActorCutMix(BaseTransform):
             if self.mask_ratio[file_path.stem] < self.min_mask_ratio:
                 return results
 
-            action = file_path.parent.name
-            options = [f for f in self.video_list[action] if file_path.stem in f]
+            options = self.video_list[file_path.stem]
             video_pick = self.video_dir / choice(options)
             results["filename"] = str(video_pick)
 
