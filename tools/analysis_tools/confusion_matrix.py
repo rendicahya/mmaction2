@@ -46,6 +46,11 @@ def parse_args():
         type=str,
         default='viridis',
         help='The color map to use. Defaults to "viridis".')
+    parser.add_argument('--figsize',
+        nargs=2, type=float,
+        metavar=('width', 'height'),
+        default=[10, 10],
+        help='Set the figure size (width, height)')
     parser.add_argument(
         '--cfg-options',
         nargs='+',
@@ -121,7 +126,8 @@ def main():
             show=args.show,
             classes=classes,
             include_values=args.include_values,
-            cmap=args.cmap)
+            cmap=args.cmap,
+            figsize=args.figsize)
         if args.show_path is not None:
             fig.savefig(args.show_path)
             print(f'The confusion matrix is saved at {args.show_path}.')
