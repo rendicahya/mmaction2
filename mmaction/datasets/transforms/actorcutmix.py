@@ -1,7 +1,8 @@
 import json
+import os
 from pathlib import Path
 from random import choice, random
-import os
+
 from mmaction.registry import TRANSFORMS
 from mmcv.transforms import BaseTransform
 
