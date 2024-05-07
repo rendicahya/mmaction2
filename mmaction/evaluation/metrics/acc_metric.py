@@ -318,7 +318,8 @@ class ConfusionMatrix(BaseMetric):
              cmap: str = 'viridis',
              classes: Optional[List[str]] = None,
              colorbar: bool = True,
-             show: bool = True):
+             show: bool = True,
+             figsize: tuple = (10, 10)):
         """Draw a confusion matrix by matplotlib.
 
         Modified from `Scikit-Learn
@@ -337,7 +338,7 @@ class ConfusionMatrix(BaseMetric):
         """  # noqa: E501
         import matplotlib.pyplot as plt
 
-        fig, ax = plt.subplots(figsize=(10, 10))
+        fig, ax = plt.subplots(figsize=figsize)
 
         num_classes = confusion_matrix.size(0)
 
