@@ -31,6 +31,10 @@ def parse_args():
     parser.add_argument(
         '--show-path', type=str, help='Path to save the visualization image.')
     parser.add_argument(
+        '--tight',
+        action='store_true',
+        help='whether to remove white spaces in the visualization image.')
+    parser.add_argument(
         '--include-values',
         action='store_true',
         help='To draw the values in the figure.')
@@ -129,7 +133,7 @@ def main():
             cmap=args.cmap,
             figsize=args.figsize)
         if args.show_path is not None:
-            fig.savefig(args.show_path)
+            fig.savefig(args.show_path, bbox_inches='tight' if args.tight else None)
             print(f'The confusion matrix is saved at {args.show_path}.')
 
 
