@@ -5,8 +5,8 @@ _base_ = [
 
 # dataset settings
 dataset_type = 'VideoDataset'
-data_root = 'data/ucf101/videos'
-data_root_val = f'data/{dataset}/videos'
+video_root = 'data/ucf101/videos'
+video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
@@ -58,7 +58,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_train,
-        data_prefix=dict(video=data_root),
+        data_prefix=dict(video=video_root),
         pipeline=train_pipeline,
     ),
 )
@@ -70,7 +70,7 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
-        data_prefix=dict(video=data_root_val),
+        data_prefix=dict(video=video_root_val),
         pipeline=val_pipeline,
         test_mode=True,
     ),
@@ -83,7 +83,7 @@ test_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_test,
-        data_prefix=dict(video=data_root_val),
+        data_prefix=dict(video=video_root_val),
         pipeline=test_pipeline,
         test_mode=True,
     ),

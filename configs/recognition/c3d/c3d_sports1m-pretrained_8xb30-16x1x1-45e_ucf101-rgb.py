@@ -6,7 +6,7 @@ _base_ = [
 # dataset settings
 dataset_type = 'VideoDataset'
 data_root = 'data/ucf101/videos'
-data_root_val = f'data/{dataset}/videos'
+data_root_val = data_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
