@@ -3,7 +3,6 @@ _base_ = [
     '../../_base_/default_runtime.py',
 ]
 
-# dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 data_root = f'data/{dataset}/videos'
@@ -12,6 +11,7 @@ split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/train.txt'
 ann_file_val = f'data/{dataset}/test.txt'
 ann_file_test = f'data/{dataset}/test.txt'
+mix_prob = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16

@@ -3,7 +3,6 @@ _base_ = [
     '../../_base_/default_runtime.py',
 ]
 
-# dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'intercutmix'
@@ -11,6 +10,7 @@ detector = 'UniDet'
 min_mask_ratio = 0.0
 relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
+mix_prob = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
@@ -25,7 +25,7 @@ ann_file_test = f'data/{dataset}/test.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='InterCutMix', video_dir=video_dir, mix_prob=0.5, min_mask_ratio=min_mask_ratio),
+    dict(type='InterCutMix', video_dir=video_dir, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),

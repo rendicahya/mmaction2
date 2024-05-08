@@ -3,7 +3,6 @@ _base_ = [
     '../../_base_/default_runtime.py',
 ]
 
-# dataset settings
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
 video_root = f'data/{dataset}/UniDet/select/intercutmix/REPP/scene'

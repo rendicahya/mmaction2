@@ -1,7 +1,9 @@
 import json
+import re
+from collections import defaultdict
 from pathlib import Path
 from random import choice, random
-import os
+
 from mmaction.registry import TRANSFORMS
 from mmcv.transforms import BaseTransform
 
@@ -12,17 +14,22 @@ class InterCutMix(BaseTransform):
         self.video_dir = Path(video_dir)
         self.mix_prob = mix_prob
         self.min_mask_ratio = min_mask_ratio
+        self.video_list = defaultdict(list)
+        path_splitter = re.compile(r"[/-]")
 
-        video_list_path = self.video_dir / "list.json"
+        with open(self.video_dir / "list.txt") as file:
+            for line in file:
+                path, class_ = line.split()
+                action, action_video, scene_class = path_splitter.split(path)
+
+                self.video_list[action_video].append(path)
+
         relevancy_thresh = self.video_dir
         relevancy_model = self.video_dir.parent
         mask_dir = relevancy_model.parent.parent / "mask"
         file_ratio_path = (
             mask_dir / relevancy_model.name / relevancy_thresh.name / "ratio.json"
         )
-
-        with open(video_list_path) as f:
-            self.video_list = json.load(f)
 
         with open(file_ratio_path) as f:
             self.mask_ratio = json.load(f)
@@ -34,8 +41,7 @@ class InterCutMix(BaseTransform):
             if self.mask_ratio[file_path.stem] < self.min_mask_ratio:
                 return results
 
-            action = file_path.parent.name
-            options = [f for f in self.video_list[action] if file_path.stem in f]
+            options = self.video_list[file_path.stem]
             video_pick = self.video_dir / choice(options)
             results["filename"] = str(video_pick)
 

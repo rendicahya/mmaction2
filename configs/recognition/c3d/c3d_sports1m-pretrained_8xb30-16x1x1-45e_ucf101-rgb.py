@@ -3,7 +3,6 @@ _base_ = [
     '../../_base_/default_runtime.py',
 ]
 
-# dataset settings
 dataset_type = 'VideoDataset'
 video_root = 'data/ucf101/videos'
 video_root_val = video_root
