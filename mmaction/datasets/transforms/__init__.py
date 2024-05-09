@@ -22,6 +22,7 @@ from .wrappers import ImgAug, PytorchVideoWrapper, TorchVisionWrapper
 from .actorcutmix import ActorCutMix
 from .intercutmix import InterCutMix
 from .mix2train import Mix2Train
+from .intercutmix_incr_prob import InterCutMixIncrProb
 
 __all__ = [
     'ArrayDecode', 'AudioFeatureSelector', 'BuildPseudoClip', 'CenterCrop',
@@ -40,5 +41,5 @@ __all__ = [
     'SampleAVAFrames', 'SampleFrames', 'TenCrop', 'ThreeCrop', 'ToMotion',
     'TorchVisionWrapper', 'Transpose', 'UniformSample', 'UniformSampleFrames',
     'UntrimmedSampleFrames', 'MMUniformSampleFrames', 'MMDecode', 'MMCompact',
-    'CLIPTokenize', 'ActorCutMix', 'InterCutMix', 'Mix2Train'
+    'CLIPTokenize', 'ActorCutMix', 'InterCutMix', 'Mix2Train', 'InterCutMixIncrProb'
 ]
