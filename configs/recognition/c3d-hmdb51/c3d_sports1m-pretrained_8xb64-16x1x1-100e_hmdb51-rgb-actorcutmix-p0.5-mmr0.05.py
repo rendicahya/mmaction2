@@ -7,23 +7,23 @@ dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'actorcutmix'
 detector = 'UniDet'
-min_mask_ratio = 0.1
+min_mask_ratio = 0.05
 mix_prob = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
-data_root = f'data/{dataset}/videos'
-video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0'
-data_root_val = f'data/{dataset}/videos'
+video_root = f'data/{dataset}/videos'
+mixed_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0'
+video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/{dataset}/train.txt'
-ann_file_val = f'data/{dataset}/test.txt'
-ann_file_test = f'data/{dataset}/test.txt'
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix', video_dir=video_dir, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
+    dict(type='ActorCutMix', video_dir=mixed_video_dir, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
@@ -64,7 +64,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_train,
-        data_prefix=dict(video=data_root),
+        data_prefix=dict(video=video_root),
         pipeline=train_pipeline,
     ),
 )
@@ -76,7 +76,7 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
-        data_prefix=dict(video=data_root_val),
+        data_prefix=dict(video=video_root_val),
         pipeline=val_pipeline,
         test_mode=True,
     ),
@@ -89,7 +89,7 @@ test_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_test,
-        data_prefix=dict(video=data_root_val),
+        data_prefix=dict(video=video_root_val),
         pipeline=test_pipeline,
         test_mode=True,
     ),
