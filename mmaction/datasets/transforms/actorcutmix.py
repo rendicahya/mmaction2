@@ -20,8 +20,8 @@ class ActorCutMix(BaseTransform):
         with open(self.video_dir / "list.txt") as file:
             for line in file:
                 path, class_ = line.split()
-                action, filename = path.split('/')
-                action_video, _, scene_class = filename.rpartition('-')
+                action, filename = path.split("/")
+                action_video, _, scene_class = filename.rpartition("-")
                 # action, action_video, scene_class = path_splitter.split(path)
 
                 self.video_list[action_video].append(path)

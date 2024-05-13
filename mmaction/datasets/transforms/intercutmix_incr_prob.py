@@ -19,7 +19,7 @@ class InterCutMixIncrProb(BaseTransform):
         self.min_mask_ratio = min_mask_ratio
         self.video_list = defaultdict(list)
         self.video_count = 0
-        path_splitter = re.compile(r"[/-]")
+        # path_splitter = re.compile(r"[/-]")
 
         with open(train_list, "rb") as file:
             self.len_train = sum(1 for _ in file)
@@ -27,7 +27,9 @@ class InterCutMixIncrProb(BaseTransform):
         with open(self.mixed_video_dir / "list.txt") as file:
             for line in file:
                 path, class_ = line.split()
-                action, action_video, scene_class = path_splitter.split(path)
+                action, filename = path.split('/')
+                action_video, _, scene_class = filename.rpartition('-')
+                # action, action_video, scene_class = path_splitter.split(path)
 
                 self.video_list[action_video].append(path)
 

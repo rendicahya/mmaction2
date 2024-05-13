@@ -15,12 +15,14 @@ class InterCutMix(BaseTransform):
         self.mix_prob = mix_prob
         self.min_mask_ratio = min_mask_ratio
         self.video_list = defaultdict(list)
-        path_splitter = re.compile(r"[/-]")
+        # path_splitter = re.compile(r"[/-]")
 
         with open(self.video_dir / "list.txt") as file:
             for line in file:
                 path, class_ = line.split()
-                action, action_video, scene_class = path_splitter.split(path)
+                action, filename = path.split('/')
+                action_video, _, scene_class = filename.rpartition('-')
+                # action, action_video, scene_class = path_splitter.split(path)
 
                 self.video_list[action_video].append(path)
 
