@@ -21,18 +21,22 @@ dataset = conf.active.dataset
 video_dir = Path(conf[dataset].path)
 action_list = [subdir.stem for subdir in sorted(video_dir.iterdir()) if subdir.is_dir()]
 
-with open(conf.cam.A.dump, "rb") as file:
+with open(conf.cam[dataset].A.dump, "rb") as file:
     dump1 = pickle.load(file)
 
-with open(conf.cam.B.dump, "rb") as file:
+with open(conf.cam[dataset].B.dump, "rb") as file:
     dump2 = pickle.load(file)
 
 assert_that(len(dump1) == len(dump2))
 
-model1 = init_recognizer(conf.cam.A.config, conf.cam.A.checkpoint, device="cuda")
-model2 = init_recognizer(conf.cam.B.config, conf.cam.B.checkpoint, device="cuda")
+model1 = init_recognizer(
+    conf.cam[dataset].A.config, conf.cam[dataset].A.checkpoint, device="cuda"
+)
+model2 = init_recognizer(
+    conf.cam[dataset].B.config, conf.cam[dataset].B.checkpoint, device="cuda"
+)
 
-with open(conf.cam.video_list, "r") as file:
+with open(conf.cam[dataset].video_list, "r") as file:
     video_list = file.read().split("\n")
 
 for i in range(len(dump1)):
@@ -50,7 +54,7 @@ for i in range(len(dump1)):
         video_path = video_dir / subpath
         video_data = mmcv.VideoReader(str(video_path))
         fps = video_data.fps
-        out_dir = Path(conf.cam.output.dir) / video_path.stem
+        out_dir = Path(conf.cam[dataset].output.dir) / video_path.stem
         out_dir.mkdir(parents=True, exist_ok=True)
 
         open(out_dir / f"prediction-1: {item1_pred}", "a")
@@ -64,27 +68,23 @@ for i in range(len(dump1)):
         bottom = top + crop_size
         collage = []
         models = model1, model1, model2
-        alphas = 0, conf.cam.output.alpha, conf.cam.output.alpha
+        alphas = 0, conf.cam.alpha, conf.cam.alpha
         vars_ = "original", "a", "b"
 
         for var, model, alpha in zip(vars_, models, alphas):
             inputs = build_inputs(model, video_path)
-            gradcam = GradCAM(model, conf.cam.target_layer, conf.cam.output.colormap)
+            gradcam = GradCAM(model, conf.cam.target_layer, conf.cam.colormap)
             results = gradcam(inputs, alpha=alpha)
             frames_batches = (results[0] * 255.0).numpy().astype(np.uint8)
             frames = frames_batches.reshape(-1, *frames_batches.shape[-3:])
             frame_list = list(frames)
-            frame_list = _resize_frames(frame_list, conf.cam.output.resolution)
+            frame_list = _resize_frames(frame_list, conf.cam[dataset].output.resolution)
 
             frame_list_numbered = []
 
             for i, frame in enumerate(frame_list):
-                if var == "original":
-                    bgr = mmcv.rgb2bgr(frame)
-
-                    mmcv.imwrite(bgr, f"{out_dir}/{var}/{i}.jpg")
-
-                frame_numbered = cv2.putText(
+                bgr = mmcv.rgb2bgr(frame)
+                numbered = cv2.putText(
                     frame,
                     str(i),
                     (10, 30),
@@ -95,7 +95,8 @@ for i in range(len(dump1)):
                     cv2.LINE_AA,
                 )
 
-                frame_list_numbered.append(frame_numbered)
+                mmcv.imwrite(bgr, f"{out_dir}/{var}/{i}.jpg")
+                frame_list_numbered.append(numbered)
 
             clip = ImageSequenceClip(frame_list_numbered, fps=fps)
 
