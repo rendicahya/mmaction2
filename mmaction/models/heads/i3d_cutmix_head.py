@@ -142,38 +142,39 @@ class I3DCutmixHead(BaseHead):
         data_samples_mix = [d for d in data_samples if hasattr(d, "scene_label")]
 
         cls_scores_orig = cls_scores[~mix_idx]
-        labels_orig = labels[~mix_idx]
-        loss_orig = self.loss_cls(cls_scores_orig, labels_orig).unsqueeze(0)
-
         cls_scores_mix = cls_scores[mix_idx]
-        action_labels_mix = labels[mix_idx]
-        scene_labels_mix = torch.tensor(
-            [d.scene_label for d in data_samples_mix],
-            device=cls_scores.device,
-        )
+        loss_list = []
 
-        mask_ratios = torch.tensor(
-            [d.mask_ratio for d in data_samples_mix],
-            device=cls_scores.device,
-        )
+        if len(cls_scores_orig) > 0:
+            labels_orig = labels[~mix_idx].type(torch.LongTensor).to(cls_scores.device)
+            loss_orig = self.loss_cls(cls_scores_orig, labels_orig).unsqueeze(0)
 
-        loss_mix = (self.loss_cls(cls_scores_mix, action_labels_mix) * mask_ratios) + (
-            self.loss_cls(cls_scores_mix, scene_labels_mix) * (1.0 - mask_ratios)
-        )
+            loss_list.append(loss_orig)
 
-        # for data_sample, cls_score, label in zip(data_samples, cls_scores, labels):
-        #     cls_score = cls_score.unsqueeze(0)
-        #     label = label.unsqueeze(0)
+        if len(cls_scores_mix) > 0:
+            action_labels_mix = (
+                labels[mix_idx].type(torch.LongTensor).to(cls_scores.device)
+            )
 
-        # if hasattr(data_sample, "scene_label"):
-        # loss = (self.loss_cls(cls_score, label) * data_sample.mask_ratio) + (
-        #     self.loss_cls(cls_score, data_sample.scene_label)
-        #     * (1.0 - data_sample.mask_ratio)
-        # )
-        # else:
-        #     loss = self.loss_cls(cls_score, label)
+            scene_labels_mix = torch.tensor(
+                [d.scene_label for d in data_samples_mix],
+                device=cls_scores.device,
+            )
 
-        loss_cls = torch.mean(torch.cat([loss_orig, loss_mix]))
+            mask_ratios = torch.tensor(
+                [d.mask_ratio for d in data_samples_mix],
+                device=cls_scores.device,
+            )
+
+            loss_mix = (
+                self.loss_cls(cls_scores_mix, action_labels_mix)
+            ) * mask_ratios + self.loss_cls(cls_scores_mix, scene_labels_mix) * (
+                1.0 - mask_ratios
+            )
+
+            loss_list.append(loss_mix)
+
+        loss_cls = torch.mean(torch.cat(loss_list))
 
         if isinstance(loss_cls, dict):
             losses.update(loss_cls)
