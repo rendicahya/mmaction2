@@ -2,6 +2,7 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
+model = dict(cls_head=dict(type='I3DCutMixHead'))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
