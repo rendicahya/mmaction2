@@ -12,7 +12,7 @@ from .base import BaseHead
 
 
 @MODELS.register_module()
-class I3DCutmixHead(BaseHead):
+class I3DCutMixHead(BaseHead):
     """Classification head for I3D.
 
     Args:
