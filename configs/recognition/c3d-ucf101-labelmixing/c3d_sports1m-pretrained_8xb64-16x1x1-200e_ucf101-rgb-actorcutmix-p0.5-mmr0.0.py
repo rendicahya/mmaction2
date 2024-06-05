@@ -2,9 +2,10 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
+model = dict(cls_head=dict(type='I3DCutMixHead'))
 
 dataset_type = 'VideoDataset'
-dataset = 'hmdb51'
+dataset = 'ucf101'
 mix_mode = 'actorcutmix'
 detector = 'UniDet'
 min_mask_ratio = 0.0
@@ -98,7 +99,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100, val_begin=1, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200, val_begin=1, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 

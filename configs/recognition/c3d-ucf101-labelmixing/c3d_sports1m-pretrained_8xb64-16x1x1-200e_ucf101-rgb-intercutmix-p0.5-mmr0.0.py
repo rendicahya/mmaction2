@@ -2,20 +2,23 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
+model = dict(cls_head=dict(type='I3DCutMixHead'))
 
 dataset_type = 'VideoDataset'
-dataset = 'hmdb51'
-mix_mode = 'actorcutmix'
+dataset = 'ucf101'
+mix_mode = 'intercutmix'
 detector = 'UniDet'
 min_mask_ratio = 0.0
 mix_prob = 0.5
+relevancy_model = 'all-mpnet-base-v2'
+relevancy_thresh = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0'
+mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -24,7 +27,7 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
+    dict(type='InterCutMix', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
@@ -98,7 +101,7 @@ test_dataloader = dict(
 
 val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100, val_begin=1, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200, val_begin=1, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 

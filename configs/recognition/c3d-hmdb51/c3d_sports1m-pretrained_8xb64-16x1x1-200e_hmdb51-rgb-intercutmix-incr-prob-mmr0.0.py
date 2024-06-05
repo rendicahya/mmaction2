@@ -16,7 +16,8 @@ batch_size = 64
 clip_len = 16
 
 video_root = f'data/{dataset}/videos'
-mixed_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
+class_index = f'data/{dataset}/annotations/classInd.txt'
+mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -25,7 +26,7 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='InterCutMixIncrProb', train_list=ann_file_train, mixed_video_dir=mixed_video_dir, mix_prob=mix_prob, max_epoch=200, min_mask_ratio=min_mask_ratio),
+    dict(type='InterCutMixIncrProb', train_list=ann_file_train, mixed_mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, max_epoch=200, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),

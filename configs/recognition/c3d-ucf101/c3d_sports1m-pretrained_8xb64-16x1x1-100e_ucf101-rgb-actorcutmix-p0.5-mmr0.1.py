@@ -4,10 +4,10 @@ _base_ = [
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'hmdb51'
+dataset = 'ucf101'
 mix_mode = 'actorcutmix'
 detector = 'UniDet'
-min_mask_ratio = 0.0
+min_mask_ratio = 0.1
 mix_prob = 0.5
 num_workers = 16
 batch_size = 64
