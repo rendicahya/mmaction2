@@ -23,6 +23,7 @@ class I3DCutMixHead(BaseHead):
         spatial_type (str): Pooling type in spatial dimension. Default: 'avg'.
         dropout_ratio (float): Probability of dropout layer. Default: 0.5.
         init_std (float): Std value for Initiation. Default: 0.01.
+        label_mix_alpha (float): Label mixing compensation factor
         kwargs (dict, optional): Any keyword argument to be used to initialize
             the head.
     """
@@ -35,6 +36,7 @@ class I3DCutMixHead(BaseHead):
         spatial_type: str = "avg",
         dropout_ratio: float = 0.5,
         init_std: float = 0.01,
+        label_mix_alpha: float = 1.0,
         **kwargs,
     ) -> None:
         super().__init__(num_classes, in_channels, loss_cls, **kwargs)
@@ -42,6 +44,7 @@ class I3DCutMixHead(BaseHead):
         self.spatial_type = spatial_type
         self.dropout_ratio = dropout_ratio
         self.init_std = init_std
+        self.label_mix_alpha = label_mix_alpha
 
         if self.dropout_ratio != 0:
             self.dropout = nn.Dropout(p=self.dropout_ratio)
@@ -166,10 +169,18 @@ class I3DCutMixHead(BaseHead):
                 device=cls_scores.device,
             )
 
+            # ActorCutMix paper, page 6, equation 7
+            # https://arxiv.org/pdf/2103.16565
+            mask_ratios_compensated = 1 - torch.pow(
+                torch.abs(1 - mask_ratios), self.label_mix_alpha
+            )
+
             loss_mix = (
                 self.loss_cls(cls_scores_mix, action_labels_mix)
-            ) * mask_ratios + self.loss_cls(cls_scores_mix, scene_labels_mix) * (
-                1.0 - mask_ratios
+                * mask_ratios_compensated
+            ) + (
+                self.loss_cls(cls_scores_mix, scene_labels_mix)
+                * (1.0 - mask_ratios_compensated)
             )
 
             loss_list.append(loss_mix)
