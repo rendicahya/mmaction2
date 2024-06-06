@@ -2,14 +2,15 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
-model = dict(cls_head=dict(type='I3DCutMixHead'))
+label_mix_alpha = 3
+model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
 min_mask_ratio = 0.0
-mix_prob = 0.1
+mix_prob = 0.4
 relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
 num_workers = 16
