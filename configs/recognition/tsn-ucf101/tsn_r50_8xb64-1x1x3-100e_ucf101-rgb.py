@@ -1,5 +1,5 @@
 _base_ = [
-    '../../_base_/models/tsn_r50.py', '../../_base_/schedules/sgd_100e.py',
+    '../../_base_/models/tsn_r50_scratch.py', '../../_base_/schedules/sgd_100e.py',
     '../../_base_/default_runtime.py'
 ]
 
@@ -125,4 +125,4 @@ param_scheduler = [
 
 model = dict(
     cls_head=dict(num_classes=101))
-load_from = 'https://download.openmmlab.com/mmaction/v1.0/recognition/tsn/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb_20220906-cd10898e.pth'
+# load_from = 'https://download.openmmlab.com/mmaction/v1.0/recognition/tsn/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb_20220906-cd10898e.pth'

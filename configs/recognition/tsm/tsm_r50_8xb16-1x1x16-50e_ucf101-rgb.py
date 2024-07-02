@@ -1,23 +1,22 @@
-_base_ = [
-    '../../_base_/models/tsn_r50.py', '../../_base_/schedules/sgd_100e.py',
-    '../../_base_/default_runtime.py'
-]
+_base_ = ['../../_base_/models/tsm_r50_scratch.py', '../../_base_/default_runtime.py']
+
+model = dict(backbone=dict(num_segments=16), cls_head=dict(num_segments=16))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-video_root = f'data/{dataset}/videos'
-video_root_val = video_root
+data_root = 'data/ucf101/videos'
+data_root_val = f'data/{dataset}/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 16
-batch_size = 64
+num_workers = 12
+batch_size = 16
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
     dict(type='DecordInit', **file_client_args),
-    dict(type='SampleFrames', clip_len=1, frame_interval=1, num_clips=3),
+    dict(type='SampleFrames', clip_len=1, frame_interval=1, num_clips=16),
     dict(type='DecordDecode'),
     dict(type='Resize', scale=(-1, 256)),
     dict(
@@ -25,7 +24,8 @@ train_pipeline = [
         input_size=224,
         scales=(1, 0.875, 0.75, 0.66),
         random_crop=False,
-        max_wh_scale_gap=1),
+        max_wh_scale_gap=1,
+        num_fixed_crops=13),
     dict(type='Resize', scale=(224, 224), keep_ratio=False),
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCHW'),
@@ -37,9 +37,9 @@ val_pipeline = [
         type='SampleFrames',
         clip_len=1,
         frame_interval=1,
-        num_clips=3,
+        num_clips=16,
         test_mode=True),
-    dict(type='DecordDecode'),
+    dict(type='DecordDecode', **file_client_args),
     dict(type='Resize', scale=(-1, 256)),
     dict(type='CenterCrop', crop_size=224),
     dict(type='FormatShape', input_format='NCHW'),
@@ -51,7 +51,7 @@ test_pipeline = [
         type='SampleFrames',
         clip_len=1,
         frame_interval=1,
-        num_clips=25,
+        num_clips=16,
         test_mode=True),
     dict(type='DecordDecode'),
     dict(type='Resize', scale=(-1, 256)),
@@ -68,7 +68,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_train,
-        data_prefix=dict(video=video_root),
+        data_prefix=dict(video=data_root),
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=batch_size,
@@ -78,7 +78,7 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
-        data_prefix=dict(video=video_root_val),
+        data_prefix=dict(video=data_root_val),
         pipeline=val_pipeline,
         test_mode=True))
 test_dataloader = dict(
@@ -89,7 +89,7 @@ test_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
-        data_prefix=dict(video=video_root_val),
+        data_prefix=dict(video=data_root_val),
         pipeline=test_pipeline,
         test_mode=True))
 
@@ -98,31 +98,30 @@ test_evaluator = val_evaluator
 
 default_hooks = dict(checkpoint=dict(interval=1000, max_keep_ckpts=1))
 
-# Default setting for scaling LR automatically
-#   - `enable` means enable scaling LR automatically
-#       or not by default.
-#   - `base_batch_size` = (8 GPUs) x (32 samples per GPU).
-auto_scale_lr = dict(enable=False, base_batch_size=256)
+train_cfg = dict(
+    type='EpochBasedTrainLoop', max_epochs=50, val_begin=1, val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
 
-# set training batch size to 4
-train_dataloader['batch_size'] = 4
-
-# Save checkpoints every epoch, and only keep the latest checkpoint
-default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=1000, max_keep_ckpts=1))
-# Set the maximum number of epochs to 10, and validate the model every 1 epochs
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=64, val_begin=1, val_interval=1)
-# adjust learning rate schedule according to 10 epochs
 param_scheduler = [
+    dict(type='LinearLR', start_factor=0.1, by_epoch=True, begin=0, end=5),
     dict(
         type='MultiStepLR',
         begin=0,
         end=50,
         by_epoch=True,
-        milestones=[20, 40],
+        milestones=[25, 45],
         gamma=0.1)
 ]
 
-model = dict(
-    cls_head=dict(num_classes=101))
-load_from = 'https://download.openmmlab.com/mmaction/v1.0/recognition/tsn/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb/tsn_imagenet-pretrained-r50_8xb32-1x1x3-100e_kinetics400-rgb_20220906-cd10898e.pth'
+optim_wrapper = dict(
+    constructor='TSMOptimWrapperConstructor',
+    paramwise_cfg=dict(fc_lr5=True),
+    optimizer=dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001),
+    clip_grad=dict(max_norm=20, norm_type=2))
+
+# Default setting for scaling LR automatically
+#   - `enable` means enable scaling LR automatically
+#       or not by default.
+#   - `base_batch_size` = (8 GPUs) x (16 samples per GPU).
+auto_scale_lr = dict(enable=False, base_batch_size=128)
