@@ -16,10 +16,11 @@ from .tsn_head import TSNHead
 from .uniformer_head import UniFormerHead
 from .x3d_head import X3DHead
 from .i3d_cutmix_head import I3DCutMixHead
+from .tsn_cutmix_head import TSNCutMixHead
 
 __all__ = [
     'BaseHead', 'GCNHead', 'I3DHead', 'MViTHead', 'OmniHead', 'SlowFastHead',
     'TPNHead', 'TRNHead', 'TSMHead', 'TSNAudioHead', 'TSNHead',
     'TimeSformerHead', 'UniFormerHead', 'RGBPoseHead', 'X3DHead', 'FeatureHead',
-    'I3DCutMixHead'
+    'I3DCutMixHead', 'TSNCutMixHead'
 ]
