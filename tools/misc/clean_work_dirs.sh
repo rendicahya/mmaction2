@@ -36,7 +36,7 @@ for dir in work_dirs*; do
         done
 
         # Return to the base directory
-        cd - || exit
+        cd ~- || exit
     fi
 done
 
