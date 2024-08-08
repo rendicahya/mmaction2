@@ -101,7 +101,7 @@ val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
 
 train_cfg = dict(
-    type='EpochBasedTrainLoop', max_epochs=180, val_begin=1, val_interval=20)
+    type='EpochBasedTrainLoop', max_epochs=180, val_begin=1, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 
@@ -118,7 +118,7 @@ param_scheduler = [
     )
 ]
 
-default_hooks = dict(checkpoint=dict(max_keep_ckpts=3))
+default_hooks = dict(checkpoint=dict(max_keep_ckpts=1))
 
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically
