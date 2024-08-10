@@ -1,16 +1,16 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained.py',
+    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
     '../../_base_/default_runtime.py',
 ]
-label_mix_alpha = 1
+label_mix_alpha = 3
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
-dataset = 'ucf101'
+dataset = 'hmdb51'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
 min_mask_ratio = 0.05
-mix_prob = 0.4
+mix_prob = 0.5
 relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
 num_workers = 16
@@ -19,7 +19,7 @@ clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
+mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/mix-0/{relevancy_model}/{relevancy_thresh}'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -37,6 +37,7 @@ train_pipeline = [
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCTHW'),
     dict(type='PackActionInputs', algorithm_keys=['scene_label', 'mask_ratio']),
+    # dict(type='PackActionInputs'),
 ]
 val_pipeline = [
     dict(type='DecordInit', **file_client_args),
