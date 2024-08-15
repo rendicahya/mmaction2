@@ -2,11 +2,9 @@ import sys
 
 sys.path.append(".")
 
-import os.path as osp
 import pickle
 from pathlib import Path
 
-import click
 import cv2
 import mmcv
 import numpy as np
