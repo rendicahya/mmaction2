@@ -9,6 +9,7 @@ dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
+detection_conf = 0.5
 min_mask_ratio = 0.1
 mix_prob = 0.5
 relevancy_model = 'all-mpnet-base-v2'

@@ -6,6 +6,7 @@ _base_ = [
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 detector = 'UniDet'
+detection_conf = 0.5
 min_mask_ratio = 0.05
 mix_prob = 0.5
 num_workers = 16

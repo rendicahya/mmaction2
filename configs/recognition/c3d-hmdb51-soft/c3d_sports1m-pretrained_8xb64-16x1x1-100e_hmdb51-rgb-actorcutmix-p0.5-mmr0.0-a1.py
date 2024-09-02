@@ -9,6 +9,7 @@ dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'actorcutmix'
 detector = 'UniDet'
+detection_conf = 0.5
 min_mask_ratio = 0.0
 mix_prob = 0.5
 num_workers = 16

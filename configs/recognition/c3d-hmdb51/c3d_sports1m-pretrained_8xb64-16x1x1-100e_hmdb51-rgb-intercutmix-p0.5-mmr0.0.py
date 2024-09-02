@@ -7,6 +7,7 @@ dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
+detection_conf = 0.5
 min_mask_ratio = 0.0
 mix_prob = 0.5
 relevancy_model = 'all-mpnet-base-v2'
@@ -17,7 +18,7 @@ clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
+mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
