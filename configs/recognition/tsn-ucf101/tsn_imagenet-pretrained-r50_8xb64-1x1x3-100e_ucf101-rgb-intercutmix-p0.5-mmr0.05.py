@@ -16,7 +16,7 @@ batch_size = 64
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/select/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
+mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
