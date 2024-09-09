@@ -7,6 +7,7 @@ model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha
 
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
+mix_mode = 'allcutmix'
 detector = 'UniDet'
 detection_conf = 0.5
 min_mask_ratio = 0.05
@@ -17,7 +18,7 @@ clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/detect/mix-0'
+mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
