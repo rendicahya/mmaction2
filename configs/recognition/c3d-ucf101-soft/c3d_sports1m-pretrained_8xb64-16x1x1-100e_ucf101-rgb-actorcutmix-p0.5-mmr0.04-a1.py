@@ -2,14 +2,15 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
-label_mix_alpha = 4
+label_mix_alpha = 1
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
+mix_mode = 'actorcutmix'
 detector = 'UniDet'
 detection_conf = 0.5
-min_mask_ratio = 0.05
+min_mask_ratio = 0.04
 mix_prob = 0.5
 num_workers = 16
 batch_size = 64
