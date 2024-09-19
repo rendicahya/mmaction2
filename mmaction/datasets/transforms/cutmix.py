@@ -1,10 +1,8 @@
 import json
-import re
 from collections import defaultdict
 from pathlib import Path
 from random import choice, random
 
-import torch
 from mmaction.registry import TRANSFORMS
 from mmcv.transforms import BaseTransform
 
