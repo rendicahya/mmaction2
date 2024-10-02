@@ -33,7 +33,7 @@ train_pipeline = [
     dict(type='RandomCrop', size=112),
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCTHW'),
-    dict(type='PackActionInputs', algorithm_keys=['scene_label', 'mask_ratio']),
+    dict(type='PackActionInputs'),
 ]
 val_pipeline = [
     dict(type='DecordInit', **file_client_args),

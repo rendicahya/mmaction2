@@ -6,9 +6,9 @@ _base_ = [
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
 mix_mode = 'actorcutmix'
-detector = 'UniDet'
-detection_conf = 0.5
-min_mask_ratio = 0.03
+detector = 'yolov8-coco'
+detection_conf = 0.25
+min_mask_ratio = 0.0
 mix_prob = 0.5
 num_workers = 16
 batch_size = 64
@@ -16,7 +16,7 @@ clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/mix-0'
+mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -33,7 +33,7 @@ train_pipeline = [
     dict(type='RandomCrop', size=112),
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCTHW'),
-    dict(type='PackActionInputs'),
+    dict(type='PackActionInputs', algorithm_keys=['scene_label', 'mask_ratio']),
 ]
 val_pipeline = [
     dict(type='DecordInit', **file_client_args),
