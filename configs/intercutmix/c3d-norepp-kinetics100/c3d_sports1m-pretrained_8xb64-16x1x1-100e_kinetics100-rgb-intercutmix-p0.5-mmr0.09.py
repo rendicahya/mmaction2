@@ -4,7 +4,7 @@ _base_ = [
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'ucf101'
+dataset = 'kinetics100'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
 detection_conf = 0.5
