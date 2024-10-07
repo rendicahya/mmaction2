@@ -2,13 +2,15 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
     '../../_base_/default_runtime.py',
 ]
+label_mix_alpha = 1
+model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
 detection_conf = 0.5
-min_mask_ratio = 0.03
+min_mask_ratio = 0.04
 mix_prob = 0.5
 relevancy_model = 'all-mpnet-base-v2'
 relevancy_thresh = 0.5
@@ -35,7 +37,7 @@ train_pipeline = [
     dict(type='RandomCrop', size=112),
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCTHW'),
-    dict(type='PackActionInputs'),
+    dict(type='PackActionInputs', algorithm_keys=['scene_label', 'mask_ratio']),
 ]
 val_pipeline = [
     dict(type='DecordInit', **file_client_args),

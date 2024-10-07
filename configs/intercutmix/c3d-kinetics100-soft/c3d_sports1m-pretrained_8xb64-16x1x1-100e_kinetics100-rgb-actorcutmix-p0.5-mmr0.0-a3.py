@@ -2,23 +2,23 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
     '../../_base_/default_runtime.py',
 ]
+label_mix_alpha = 3
+model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
-mix_mode = 'intercutmix'
+mix_mode = 'actorcutmix'
 detector = 'UniDet'
 detection_conf = 0.5
-min_mask_ratio = 0.03
+min_mask_ratio = 0.0
 mix_prob = 0.5
-relevancy_model = 'all-mpnet-base-v2'
-relevancy_thresh = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0/{relevancy_model}/{relevancy_thresh}'
+mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/{mix_mode}/REPP/mix-0'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -27,7 +27,7 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='InterCutMix', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
+    dict(type='ActorCutMix', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
@@ -35,7 +35,7 @@ train_pipeline = [
     dict(type='RandomCrop', size=112),
     dict(type='Flip', flip_ratio=0.5),
     dict(type='FormatShape', input_format='NCTHW'),
-    dict(type='PackActionInputs'),
+    dict(type='PackActionInputs', algorithm_keys=['scene_label', 'mask_ratio']),
 ]
 val_pipeline = [
     dict(type='DecordInit', **file_client_args),
