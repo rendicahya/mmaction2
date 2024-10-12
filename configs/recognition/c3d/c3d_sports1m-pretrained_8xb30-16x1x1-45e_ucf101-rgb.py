@@ -1,16 +1,16 @@
 _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained.py',
-    '../../_base_/default_runtime.py',
+    '../../_base_/default_runtime.py'
 ]
 
+# dataset settings
 dataset_type = 'VideoDataset'
-video_root = 'data/ucf101/videos'
-video_root_val = video_root
+data_root = 'data/ucf101/videos'
+data_root_val = 'data/ucf101/videos'
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
-ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-num_workers = 16
+ann_file_train = f'data/ucf101/ucf101_train_split_{split}_videos.txt'
+ann_file_val = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
+ann_file_test = f'data/ucf101/ucf101_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
@@ -54,34 +54,34 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=30,
-    num_workers=num_workers,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_train,
-        data_prefix=dict(video=video_root),
+        data_prefix=dict(video=data_root),
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=30,
-    num_workers=num_workers,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_val,
-        data_prefix=dict(video=video_root_val),
+        data_prefix=dict(video=data_root_val),
         pipeline=val_pipeline,
         test_mode=True))
 test_dataloader = dict(
     batch_size=1,
-    num_workers=num_workers,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),
     dataset=dict(
         type=dataset_type,
         ann_file=ann_file_test,
-        data_prefix=dict(video=video_root_val),
+        data_prefix=dict(video=data_root_val),
         pipeline=test_pipeline,
         test_mode=True))
 

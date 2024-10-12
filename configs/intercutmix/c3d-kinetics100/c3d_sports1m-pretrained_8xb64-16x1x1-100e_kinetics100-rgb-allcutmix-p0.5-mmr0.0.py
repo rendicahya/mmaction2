@@ -5,7 +5,7 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
-mix_mode = 'actorcutmix'
+mix_mode = 'allcutmix'
 detector = 'UniDet'
 detection_conf = 0.5
 min_mask_ratio = 0.0
