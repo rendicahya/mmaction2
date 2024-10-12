@@ -77,7 +77,8 @@ class ActorCutMix_v2(BaseTransform):
             for line in file:
                 path, class_ = line.split()
                 action, filename = path.split("/")
-                action_video, _, scene_label = filename.rpartition("-")
+                split = filename.split("-")
+                action_video = split[-3]
 
                 self.video_list[action_video].append(path)
 
