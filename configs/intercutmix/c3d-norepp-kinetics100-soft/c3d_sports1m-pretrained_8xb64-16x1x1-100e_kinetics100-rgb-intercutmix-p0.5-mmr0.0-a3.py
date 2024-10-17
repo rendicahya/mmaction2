@@ -6,7 +6,7 @@ label_mix_alpha = 3
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
-dataset = 'ucf101'
+dataset = 'kinetics100'
 mix_mode = 'intercutmix'
 detector = 'UniDet'
 detection_conf = 0.5
