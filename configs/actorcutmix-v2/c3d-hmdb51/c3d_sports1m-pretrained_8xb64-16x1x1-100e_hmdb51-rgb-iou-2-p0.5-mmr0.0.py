@@ -5,7 +5,7 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
-scene_selection = 'random'
+scene_selection = 'iou-2'
 detector = 'yolov8-coco'
 detection_conf = 0.25
 min_mask_ratio = 0.0
