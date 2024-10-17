@@ -63,7 +63,7 @@ class ActorCutMix_v2(BaseTransform):
         self.video_list = defaultdict(list)
         self.class_index = {}
 
-        mask_ratio_file = self.mix_video_dir.parent / "mask/ratio.json"
+        mask_ratio_file = self.mix_video_dir.parent.parent / "detect/mask/ratio.json"
 
         with open(class_index) as file:
             for line in file:
@@ -77,8 +77,8 @@ class ActorCutMix_v2(BaseTransform):
             for line in file:
                 path, class_ = line.split()
                 action, filename = path.split("/")
-                split = filename.split("-")
-                action_video = split[-3]
+                dash_index = filename.rfind("-", 0, filename.rfind("-"))
+                action_video = filename[:dash_index]
 
                 self.video_list[action_video].append(path)
 
@@ -95,6 +95,8 @@ class ActorCutMix_v2(BaseTransform):
             video_pick = self.mix_video_dir / choice(options)
             action_video, _, scene_label = video_pick.stem.rpartition("-")
             scene_id = self.class_index[scene_label]
+            # print(scene_label, scene_id)
+            # exit()
 
             results["filename"] = str(video_pick)
             results["scene_label"] = scene_id
