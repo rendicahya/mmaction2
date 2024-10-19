@@ -56,14 +56,13 @@ class ActorCutMix(BaseTransform):
 
 @TRANSFORMS.register_module()
 class ActorCutMix_v2(BaseTransform):
-    def __init__(self, mix_video_dir, class_index, mix_prob, min_mask_ratio):
+    def __init__(self, mix_video_dir, class_index, mix_prob, mask_dir_name):
         self.mix_video_dir = Path(mix_video_dir)
         self.mix_prob = mix_prob
-        self.min_mask_ratio = min_mask_ratio
         self.video_list = defaultdict(list)
         self.class_index = {}
 
-        mask_ratio_file = self.mix_video_dir.parent.parent / "detect/mask/ratio.json"
+        mask_ratio_file = self.mix_video_dir.parent.parent / f"detect/{mask_dir_name}/ratio.json"
 
         with open(class_index) as file:
             for line in file:
@@ -86,20 +85,14 @@ class ActorCutMix_v2(BaseTransform):
         if random() < self.mix_prob:
             file_path = Path(results["filename"])
             mask_ratio = self.mask_ratio[file_path.stem]
-            results["mask_ratio"] = mask_ratio
-
-            if mask_ratio < self.min_mask_ratio:
-                return results
-
             options = self.video_list[file_path.stem]
             video_pick = self.mix_video_dir / choice(options)
             action_video, _, scene_label = video_pick.stem.rpartition("-")
             scene_id = self.class_index[scene_label]
-            # print(scene_label, scene_id)
-            # exit()
 
             results["filename"] = str(video_pick)
             results["scene_label"] = scene_id
+            results["mask_ratio"] = mask_ratio
 
         return results
 

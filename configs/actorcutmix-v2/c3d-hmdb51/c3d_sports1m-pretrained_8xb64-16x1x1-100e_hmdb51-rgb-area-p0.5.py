@@ -7,8 +7,8 @@ dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
 scene_selection = 'area'
 detector = 'yolov8-coco'
+mask_dir_name = 'mask'
 detection_conf = 0.25
-min_mask_ratio = 0.0
 mix_prob = 0.5
 num_workers = 16
 batch_size = 64
@@ -25,7 +25,7 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix_v2', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, min_mask_ratio=min_mask_ratio),
+    dict(type='ActorCutMix_v2', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, mask_dir_name=mask_dir_name),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
