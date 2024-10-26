@@ -6,10 +6,10 @@ label_mix_alpha = 1
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
-dataset = 'hmdb51'
-scene_selection = 'random-opening'
+dataset = 'ucf101'
+scene_selection = 'random-dilation'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask-opening'
+mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16
