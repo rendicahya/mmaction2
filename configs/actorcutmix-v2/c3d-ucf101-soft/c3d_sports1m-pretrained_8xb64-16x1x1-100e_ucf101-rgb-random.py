@@ -1,5 +1,5 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
+    '../../_base_/models/c3d_sports1m_pretrained.py',
     '../../_base_/default_runtime.py',
 ]
 label_mix_alpha = 1

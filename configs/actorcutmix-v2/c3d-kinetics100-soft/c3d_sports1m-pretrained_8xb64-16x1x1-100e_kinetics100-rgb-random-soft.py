@@ -1,15 +1,15 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained.py',
+    '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
     '../../_base_/default_runtime.py',
 ]
 label_mix_alpha = 1
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
-dataset = 'ucf101'
-scene_selection = 'iou'
+dataset = 'kinetics100'
+scene_selection = 'random-soft'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask'
+mask_dir_name = 'mask-soft'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16
