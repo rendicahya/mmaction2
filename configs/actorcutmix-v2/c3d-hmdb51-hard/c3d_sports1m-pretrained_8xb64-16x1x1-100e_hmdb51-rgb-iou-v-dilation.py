@@ -5,9 +5,9 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
-scene_selection = 'bao'
+scene_selection = 'iou-v-dilation'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask'
+mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16
