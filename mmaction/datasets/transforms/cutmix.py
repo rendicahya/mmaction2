@@ -62,7 +62,9 @@ class ActorCutMix_v2(BaseTransform):
         self.video_list = defaultdict(list)
         self.class_index = {}
 
-        mask_ratio_file = self.mix_video_dir.parent.parent / f"detect/{mask_dir_name}/ratio.json"
+        mask_ratio_file = (
+            self.mix_video_dir.parent.parent / f"detect/{mask_dir_name}/ratio.json"
+        )
 
         with open(class_index) as file:
             for line in file:
@@ -98,8 +100,24 @@ class ActorCutMix_v2(BaseTransform):
 
 
 @TRANSFORMS.register_module()
-class InterCutMix(BaseTransform):
+class ActorCutMixCorruptedDemo(BaseTransform):
+    def __init__(self, corrupted_video_dir, class_index, mix_prob):
+        self.corrupted_video_dir = Path(corrupted_video_dir)
+        self.mix_prob = mix_prob
 
+    def transform(self, results):
+        if random() < self.mix_prob:
+            file_path = Path(results["filename"])
+            action = file_path.parent.name
+            results["filename"] = str(
+                self.corrupted_video_dir / action / file_path.with_suffix(".mp4").name
+            )
+
+        return results
+
+
+@TRANSFORMS.register_module()
+class InterCutMix(BaseTransform):
     def __init__(self, mix_video_dir, class_index, mix_prob, min_mask_ratio):
         self.mix_video_dir = Path(mix_video_dir)
         self.mix_prob = mix_prob
