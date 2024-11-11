@@ -1,4 +1,3 @@
-import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -19,7 +18,7 @@ class Mix2Train(BaseTransform):
 
         with open(self.video_dir / "list.txt") as file:
             for line in file:
-                path, class_ = line.split()
+                path, class_id = line.split()
                 action, action_video, scene_video = path_splitter.split(path)
 
                 self.video_list[action_video].append(path)
@@ -31,6 +30,7 @@ class Mix2Train(BaseTransform):
             if not file_path.stem in self.video_list:
                 return results
 
+            print('Found aug video')
             options = self.video_list[file_path.stem]
             video_pick = self.video_dir / choice(options)
             results["filename"] = str(video_pick)

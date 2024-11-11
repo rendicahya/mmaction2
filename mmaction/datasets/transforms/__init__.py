@@ -19,7 +19,11 @@ from .processing import (CenterCrop, ColorJitter, Flip, Fuse, MultiScaleCrop,
                          TenCrop, ThreeCrop)
 from .text_transforms import CLIPTokenize
 from .wrappers import ImgAug, PytorchVideoWrapper, TorchVisionWrapper
-from .cutmix import ActorCutMix, ActorCutMix_v2, InterCutMix, InterCutMixIncrProb, ActorCutMixCorruptedDemo
+from .actorcutmix import ActorCutMix
+from .actorcutmix_v2 import ActorCutMix_v2
+from .actorcutmix_corrupt_demo import ActorCutMixCorruptDemo
+from .intercutmix_incr_prob import InterCutMixIncrProb
+from .intercutmix import InterCutMix
 from .mix2train import Mix2Train
 
 __all__ = [
@@ -39,6 +43,6 @@ __all__ = [
     'SampleAVAFrames', 'SampleFrames', 'TenCrop', 'ThreeCrop', 'ToMotion',
     'TorchVisionWrapper', 'Transpose', 'UniformSample', 'UniformSampleFrames',
     'UntrimmedSampleFrames', 'MMUniformSampleFrames', 'MMDecode', 'MMCompact',
-    'CLIPTokenize', 'ActorCutMix', 'ActorCutMix_v2', 'InterCutMix', 'InterCutMixIncrProb', 'ActorCutMixCorruptedDemo',
+    'CLIPTokenize', 'ActorCutMix', 'ActorCutMix_v2', 'InterCutMix', 'InterCutMixIncrProb', 'ActorCutMixCorruptDemo',
     'Mix2Train', 
 ]
