@@ -1,13 +1,13 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
+    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
     '../../_base_/default_runtime.py',
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'kinetics100'
-scene_selection = 'bao-v'
+dataset = 'hmdb51'
+scene_selection = 'bao-m-dilation-std'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask'
+mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16

@@ -5,7 +5,7 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
-scene_selection = 'bao-m-dilation'
+scene_selection = 'bao-v-dilation'
 detector = 'yolov8-coco'
 mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
