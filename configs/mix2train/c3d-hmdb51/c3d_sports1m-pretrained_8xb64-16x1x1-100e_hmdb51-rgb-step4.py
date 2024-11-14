@@ -11,7 +11,7 @@ batch_size = 64
 clip_len = 16
 
 video_root = f'data/{dataset}/videos'
-mixed_video_dir = f'data/{dataset}/mix2train'
+mixed_video_dir = f'data/{dataset}/mix2train/bao-m'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
@@ -20,7 +20,7 @@ ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='Mix2Train', video_dir=mixed_video_dir, mix_prob=mix_prob),
+    dict(type='Mix2Train', mixed_video_dir=mixed_video_dir, mix_prob=mix_prob),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
