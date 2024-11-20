@@ -25,6 +25,7 @@ from .actorcutmix_corrupt_demo import ActorCutMixCorruptDemo
 from .intercutmix_incr_prob import InterCutMixIncrProb
 from .intercutmix import InterCutMix
 from .mix2train import Mix2Train
+from .videomix import VideoMix
 
 __all__ = [
     'ArrayDecode', 'AudioFeatureSelector', 'BuildPseudoClip', 'CenterCrop',
@@ -44,5 +45,5 @@ __all__ = [
     'TorchVisionWrapper', 'Transpose', 'UniformSample', 'UniformSampleFrames',
     'UntrimmedSampleFrames', 'MMUniformSampleFrames', 'MMDecode', 'MMCompact',
     'CLIPTokenize', 'ActorCutMix', 'ActorCutMix_v2', 'InterCutMix', 'InterCutMixIncrProb', 'ActorCutMixCorruptDemo',
-    'Mix2Train', 
+    'Mix2Train', 'VideoMix'
 ]
