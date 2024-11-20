@@ -5,7 +5,7 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'hmdb51'
-scene_selection = 'bao-m-dilation-std'
+scene_selection = 'bao-m-dilation-enlarged-soft-std'
 detector = 'yolov8-coco'
 mask_dir_name = 'mask-dilation'
 detection_conf = 0.25

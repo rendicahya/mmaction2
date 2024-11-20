@@ -5,9 +5,9 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'ucf101'
-scene_selection = 'random-opening-std'
+scene_selection = 'bao-m-dilation-enlarged-soft-std'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask-opening'
+mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16

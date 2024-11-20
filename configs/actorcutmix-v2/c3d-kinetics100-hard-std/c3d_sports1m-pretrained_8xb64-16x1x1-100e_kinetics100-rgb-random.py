@@ -5,7 +5,7 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
-scene_selection = 'random-std'
+scene_selection = 'random'
 detector = 'yolov8-coco'
 mask_dir_name = 'mask'
 detection_conf = 0.25
