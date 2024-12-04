@@ -1,11 +1,11 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
+    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
     '../../_base_/default_runtime.py',
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'kinetics100'
-scene_selection = 'random'
+dataset = 'hmdb51'
+scene_selection = 'videomix'
 detector = 'yolov8-coco'
 mask_dir_name = 'mask'
 detection_conf = 0.25
@@ -16,7 +16,7 @@ clip_len = 16
 
 video_root = f'data/{dataset}/videos'
 class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/mix/{scene_selection}'
+mix_video_dir = f'data/{dataset}/{scene_selection}/videos'
 video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'

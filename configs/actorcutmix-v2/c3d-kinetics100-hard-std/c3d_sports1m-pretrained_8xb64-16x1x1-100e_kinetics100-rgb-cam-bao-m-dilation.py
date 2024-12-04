@@ -5,9 +5,9 @@ _base_ = [
 
 dataset_type = 'VideoDataset'
 dataset = 'kinetics100'
-scene_selection = 'random'
+scene_selection = 'bao-m-dilation-std'
 detector = 'yolov8-coco'
-mask_dir_name = 'mask'
+mask_dir_name = 'mask-dilation'
 detection_conf = 0.25
 mix_prob = 0.5
 num_workers = 16
@@ -21,7 +21,7 @@ video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'{video_root}/list.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [

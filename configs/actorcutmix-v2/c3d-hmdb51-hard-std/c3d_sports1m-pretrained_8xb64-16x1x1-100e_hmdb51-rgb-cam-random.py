@@ -1,11 +1,11 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
+    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
     '../../_base_/default_runtime.py',
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'kinetics100'
-scene_selection = 'random-hflip-std'
+dataset = 'hmdb51'
+scene_selection = 'random'
 detector = 'yolov8-coco'
 mask_dir_name = 'mask'
 detection_conf = 0.25
@@ -21,7 +21,7 @@ video_root_val = video_root
 split = 1  # official train/test splits. valid numbers: 1, 2, 3
 ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
 ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
+ann_file_test = f'{video_root}/list.txt'
 
 file_client_args = dict(io_backend='disk')
 train_pipeline = [

@@ -1,31 +1,22 @@
 _base_ = [
-    '../../_base_/models/c3d_sports1m_pretrained.py',
+    '../../_base_/models/c3d_sports1m_pretrained_51classes.py',
     '../../_base_/default_runtime.py',
 ]
 
 dataset_type = 'VideoDataset'
-dataset = 'ucf101'
-scene_selection = 'random-hflip-std'
-detector = 'yolov8-coco'
-mask_dir_name = 'mask'
-detection_conf = 0.25
-mix_prob = 0.5
+dataset = 'hmdb51'
+video_root = f'data/{dataset}/scene'
+video_root_val = video_root
+split = 1  # official train/test splits. valid numbers: 1, 2, 3
+ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
+ann_file_val = f'data/{dataset}/hmdb51_all_videos.txt'
+ann_file_test = f'data/{dataset}/hmdb51_all_videos.txt'
 num_workers = 16
 batch_size = 64
 clip_len = 16
 
-video_root = f'data/{dataset}/videos'
-class_index = f'data/{dataset}/annotations/classInd.txt'
-mix_video_dir = f'data/{dataset}/{detector}/{detection_conf}/mix/{scene_selection}'
-video_root_val = video_root
-split = 1  # official train/test splits. valid numbers: 1, 2, 3
-ann_file_train = f'data/{dataset}/{dataset}_train_split_{split}_videos.txt'
-ann_file_val = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-ann_file_test = f'data/{dataset}/{dataset}_val_split_{split}_videos.txt'
-
 file_client_args = dict(io_backend='disk')
 train_pipeline = [
-    dict(type='ActorCutMix_v2', mix_video_dir=mix_video_dir, class_index=class_index, mix_prob=mix_prob, mask_dir_name=mask_dir_name),
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=clip_len, frame_interval=1, num_clips=1),
     dict(type='DecordDecode'),
