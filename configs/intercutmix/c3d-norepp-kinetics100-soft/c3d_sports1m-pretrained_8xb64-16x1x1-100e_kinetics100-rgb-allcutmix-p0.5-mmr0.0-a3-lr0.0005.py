@@ -2,7 +2,7 @@ _base_ = [
     '../../_base_/models/c3d_sports1m_pretrained_100classes.py',
     '../../_base_/default_runtime.py',
 ]
-label_mix_alpha = 1
+label_mix_alpha = 3
 model = dict(cls_head=dict(type='I3DCutMixHead', label_mix_alpha=label_mix_alpha))
 
 dataset_type = 'VideoDataset'
@@ -11,7 +11,7 @@ mix_mode = 'allcutmix'
 detector = 'UniDet'
 detection_conf = 0.5
 min_mask_ratio = 0.0
-mix_prob = 0.0
+mix_prob = 0.5
 num_workers = 16
 batch_size = 64
 clip_len = 16
@@ -117,7 +117,7 @@ param_scheduler = [
 ]
 
 optim_wrapper = dict(
-    optimizer=dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0005),
+    optimizer=dict(type='SGD', lr=0.0005, momentum=0.9, weight_decay=0.0005),
     clip_grad=dict(max_norm=40, norm_type=2),
 )
 
