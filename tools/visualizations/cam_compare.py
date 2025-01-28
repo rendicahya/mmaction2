@@ -16,16 +16,16 @@ from moviepy.editor import ImageSequenceClip, clips_array
 from vis_cam import _resize_frames, build_inputs
 
 dataset = conf.active.dataset
-video_dir = Path(conf[dataset].path)
+video_dir = Path(conf.datasets[dataset].path)
 action_list = [subdir.stem for subdir in sorted(video_dir.iterdir()) if subdir.is_dir()]
 
 with open(conf.cam[dataset].A.dump, "rb") as file:
-    dump1 = pickle.load(file)
+    dump_A = pickle.load(file)
 
 with open(conf.cam[dataset].B.dump, "rb") as file:
-    dump2 = pickle.load(file)
+    dump_B = pickle.load(file)
 
-assert_that(len(dump1) == len(dump2))
+assert_that(len(dump_A) == len(dump_B))
 
 model1 = init_recognizer(
     conf.cam[dataset].A.config, conf.cam[dataset].A.checkpoint, device="cuda"
@@ -37,9 +37,9 @@ model2 = init_recognizer(
 with open(conf.cam[dataset].video_list, "r") as file:
     video_list = file.read().split("\n")
 
-for i in range(len(dump1)):
-    item1 = dump1[i]
-    item2 = dump2[i]
+for i in range(len(dump_A)):
+    item1 = dump_A[i]
+    item2 = dump_B[i]
 
     item2_correct = item2["pred_label"] == item2["gt_label"]
     item1_wrong = item1["pred_label"] != item1["gt_label"]
