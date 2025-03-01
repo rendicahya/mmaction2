@@ -9,9 +9,12 @@ from mmcv.transforms import BaseTransform
 
 @TRANSFORMS.register_module()
 class ActorCutMix_v2(BaseTransform):
-    def __init__(self, mix_video_dir, class_index, mix_prob, mask_dir_name):
+    def __init__(
+        self, mix_video_dir, class_index, mix_prob, mask_dir_name, max_mask_ratio=1.0
+    ):
         self.mix_video_dir = Path(mix_video_dir)
         self.mix_prob = mix_prob
+        self.max_mask_ratio = max_mask_ratio
         self.video_list = defaultdict(list)
         self.class_index = {}
 
@@ -40,6 +43,10 @@ class ActorCutMix_v2(BaseTransform):
         if random() < self.mix_prob:
             file_path = Path(results["filename"])
             mask_ratio = self.mask_ratio[file_path.stem]
+
+            if mask_ratio > self.max_mask_ratio:
+                return results
+
             options = self.video_list[file_path.stem]
             video_pick = self.mix_video_dir / choice(options)
             action_video, _, scene_label = video_pick.stem.rpartition("-")
